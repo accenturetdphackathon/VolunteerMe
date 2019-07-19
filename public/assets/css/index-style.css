@@ -69,7 +69,7 @@ html {
 h1, h2, h3, h4, h5 {
   color: #EB4616;
   font-family: 'heading-font';
-  text-transform: uppercase;
+  <!-- text-transform: uppercase; -->
 }
 
 hr {
