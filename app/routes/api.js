@@ -39,23 +39,18 @@ module.exports = function(router) {
     var user = new User();
     user.firstName = req.body.firstName;
     user.lastName = req.body.lastName;
-    user.major = req.body.major;
-    user.year = req.body.year;
-    user.nationality = req.body.nationality;
-    user.ethnicity = req.body.ethnicity;
-    user.sex = req.body.sex;
     user.email = req.body.email;
     user.username = req.body.username;
     user.password = req.body.password;
-    user.listServ = req.body.listServ;
 
-    if (req.body.username == null || req.body.password == null || req.body.email == null || req.body.firstName == null || req.body.lastName == null || req.body.major == null || req.body.year == null || req.body.nationality == null || req.body.ethnicity == null || req.body.sex == null || req.body.username == '' || req.body.password == '' || req.body.email == '' || req.body.firstName == '' || req.body.lastName == '' || req.body.major == '' || req.body.year == '' || req.body.nationality == '' || req.body.ethnicity == '' || req.body.sex == '') {
+    if (req.body.username == null || req.body.password == null || req.body.email == null || req.body.firstName == null || req.body.lastName == null || req.body.username == '' || req.body.password == '' || req.body.email == '' || req.body.firstName == '' || req.body.lastName == '') {
       res.json({
         success: false,
         message: 'Make sure you filled out the entire form!'
       });
     } else {
       user.save(function(err) {
+        console.log("=== LINE 53 ===");
         if (err) {
           if (err.errors != null) {
             if (err.errors.firstName) {
