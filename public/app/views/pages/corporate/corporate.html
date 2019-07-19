@@ -1,0 +1,226 @@
+<div class="container custom-container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Corporate Database</h1>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-item-highlight nav-link active" id="nav-company-tab" data-toggle="tab" data-target="#nav-company" role="tab" aria-controls="nav-company" aria-selected="false">Companies</a>
+      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">Bookmarks</a>
+    </div>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <!-- COMPANIES -->
+    <div class="tab-pane fade show active" id="nav-company" role="tabpanel" aria-labelledby=" nav-company-tab">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="row" ng-if="corporate.loading">
+              <div class="col-sm-12">
+                <div class="jumbotron text-center turquoise">
+                  <i class="fas fa-sync fa-spin fa-10x">
+                  </i>
+                  <h2 class="turquoise">Loading</h2>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="corporate.empty && !corporate.loading">
+              <div class="col-sm-12">
+                <div class="container">
+                  <div class="jumbotron">
+                    <p class="text-center">THERE ARE NO COMPANIES IN THE CORPORATE DATABASE AT THIS TIME.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="!corporate.empty">
+              <div class="col-sm-12">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" ng-model="corporateSearchText">
+                </div>
+              </div>
+              <div class="col-12 col-md-4 col-lg-3" ng-repeat="company in corporate.companies | filter: corporateSearchText | orderBy: 'name'" style="margin-bottom: 16px;">
+                <div class="card" ng-if="!company.sponsor">
+                  <img class="card-img-top img-company" ng-src="{{ company.logo }}">
+                  <div class="card-footer text-center">
+                    <h4 class="ellipsis">{{ company.name }}</h4>
+                    <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(company._id)">Profile</button>
+                  </div>
+                </div>
+                <div class="card sponsor" ng-if="company.sponsor">
+                  <img class="card-img-top img-company" ng-src="{{ company.logo }}">
+                  <div class="card-footer text-center">
+                    <h4 class="ellipsis">{{ company.name }}</h4>
+                    <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(company._id)">Profile</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKMARKS -->
+    <div class="tab-pane fade show" id="nav-bookmark" role="tabpanel" aria-labelledby="nav-bookmark-tab">
+      <div class="container">
+        <div class="row" ng-if="corporate.bookmarks == 0">
+          <div class="col-sm-12">
+            <div class="container">
+              <div class="jumbotron">
+                <p class="text-center">YOU HAVE NO COMPANIES BOOKMARKED.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" ng-if="corporate.bookmarks != 0" ng-repeat="bookmark in corporate.bookmarks | orderBy: 'name'">
+          <div class="col-sm-3">
+            <img class="img-fluid img-company" ng-src="{{ bookmark.logo }}">
+          </div>
+          <div class="col-sm-7">
+            <h2>{{ bookmark.name }}</h2>
+            <div class="row" style="margin-bottom: 16px">
+              <div class="col-12">
+                <p>{{ bookmark.overview }}</p>
+              </div>
+              <div class="col-6">
+                <h4>News Link</h4>
+                <a href="{{ bookmark.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+              <div class="col-6">
+                <h4>Apply Link</h4>
+                <a href="{{ bookmark.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Profile</button>
+            <button type="button" class="btn btn-block btn-outline-danger" ng-click="corporate.removeBookmark(bookmark._id)">Remove</button>
+          </div>
+          <div class="col-12">
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="moreInfoModal" aria-labelledby="moreInfoModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="moreInfoModal">Company Profile</h2>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <h3>{{ corporate.company.name }}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-4">
+            <img class="img-fluid img-logo" ng-src="{{ corporate.company.logo }}">
+            <div ng-if="corporate.company.slogan">
+              <h4>Slogan</h4>
+              <p>"{{ corporate.company.slogan }}"</p>
+            </div>
+            <h4>Majors</h4>
+            <p>{{ corporate.company.majorsList }}</p>
+            <h4>Industries</h4>
+            <p>{{ corporate.company.industryList }}</p>
+          </div>
+          <div class="col-12 col-lg-8">
+            <div ng-if="corporate.company.overview">
+              <h4>Overview</h4>
+              <p>{{ corporate.company.overview }}</p>
+            </div>
+            <div ng-if="corporate.company.mission">
+              <h4>Mission</h4>
+              <p>{{ corporate.company.mission }}</p>
+            </div>
+            <div ng-if="corporate.company.goals">
+              <h4>Goals</h4>
+              <p>{{ corporate.company.goals }}</p>
+            </div>
+            <div ng-if="corporate.company.model">
+              <h4>Business Model/Operations Highlights</h4>
+              <p>{{ corporate.company.model }}</p>
+            </div>
+            <div class="row" style="margin-bottom: 16px;">
+              <div class="col-6">
+                <h4>News Link</h4>
+                <a href="{{ corporate.company.news }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+              <div class="col-6">
+                <h4>Apply Link</h4>
+                <a href="{{ corporate.company.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+            </div>
+            <h4>Other Information</h4>
+            <div class="row" style="margin-bottom: 16px;">
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.academia"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.academia"></i>
+                Academia
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.government"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.government"></i>
+                Government Department/Contractor
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.nonprofit"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.nonprofit"></i>
+                Non-profit Organization
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.visa"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.visa"></i>
+                Providing Visa Sponsorship
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.sponsor"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.sponsor"></i>
+                SHPE UF Sponsor
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.ipc"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.ipc"></i>
+                Industry Partnership Council
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.bbqFall"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.bbqFall"></i>
+                Attending Fall BBQ with Industry
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.bbqSpring"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.bbqSpring"></i>
+                Attending Spring BBQ with Industry
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="corporate.company.national"></i>
+                <i class="fas fa-times fa-false" ng-if="!corporate.company.national"></i>
+                Attending SHPE National Convention
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="button" class="btn btn-light" ng-click="corporate.closeMoreInfoModal()">Close</button>
+            <button type="button" class="btn btn-success float-right" ng-if="!corporate.company.bookmark" ng-click="corporate.addBookmark(corporate.company._id)">Add Bookmark</button>
+            <button type="button" class="btn btn-danger float-right" ng-if="corporate.company.bookmark" ng-click="corporate.removeBookmark(corporate.company._id)">Remove Bookmark</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

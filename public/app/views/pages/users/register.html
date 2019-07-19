@@ -1,0 +1,116 @@
+<div class="register-bg full-height">
+  <div class="container">
+    <div class="row">
+      <div class="offset-1 col-10 offset-md-2 col-md-8 register-container">
+        <h1>Register</h1>
+
+        <hr>
+
+        <div class="success-message" ng-show="register.successMsg">
+          <div class="alert alert-success">{{ register.successMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="register.errorMsg">
+          <div class="alert alert-danger">{{ register.errorMsg }}</div>
+        </div>
+
+        <form name="regForm" ng-submit="register.regUser(regData);" novalidate>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="userFirst">First Name <span ng-show="(!regForm.firstName.$pristine && regForm.firstName.$error.required) || (regForm.$submitted && regForm.firstName.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="firstName" id="userFirst" ng-model="register.regData.firstName" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="userLast">Last Name <span ng-show="(!regForm.lastName.$pristine && regForm.lastName.$error.required) || (regForm.$submitted && regForm.lastName.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="lastName" id="userLast" ng-model="register.regData.lastName" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="userMajor">Major  <span ng-show="(!regForm.major.$pristine && regForm.major.$error.required) || (regForm.$submitted && regForm.major.$error.required)"> (This field is required)</span></label>
+              <select class="form-control" name="major" id="userMajor" ng-model="register.regData.major" required>
+                <option ng-repeat="major in register.majors">{{ major }}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="userYear">Year <span ng-show="(!regForm.year.$pristine && regForm.year.$error.required) || (regForm.$submitted && regForm.year.$error.required)"> (This field is required)</span></label>
+              <select class="form-control" name="year" id="userYear" ng-model="register.regData.year" required>
+                <option ng-repeat="year in register.years">{{ year }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="userNationality">Country of Origin <span ng-show="(!regForm.nationality.$pristine && regForm.nationality.$error.required) || (regForm.$submitted && regForm.nationality.$error.required)"> (This is field is required)</span></label>
+              <select class="form-control" name="nationality" id="userNationality" ng-model="register.regData.nationality" required>
+                <option ng-repeat="country in register.countries">{{ country }}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="userEthnicity">Ethnicity<span ng-show="(!regForm.ethnicity.$pristine && regForm.ethnicity.$error.required) || (regForm.$submitted && regForm.ethnicity.$error.required)"> (This field is required)</span></label>
+              <select class="form-control" name="ethnicity" id="userEthnicity" ng-model="register.regData.ethnicity" required>
+                <option ng-repeat="ethnicity in register.ethnicities">{{ ethnicity }}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="userSex">Sex<span ng-show="(!regForm.sex.$pristine && regForm.sex.$error.required) || (regForm.$submitted && regForm.sex.$error.required)"> (This field is required)</span></label>
+              <select class="form-control" name="sex" id="userSex" ng-model="register.regData.sex" required>
+                <option ng-repeat="sex in register.sexes">{{ sex }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="userEmail">Email <span ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)"> (This field is required)</span></label>
+              <input type="email" class="form-control" name="email" id="userEmail" ng-model="register.regData.email" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="userUsername">Username <span ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="username" id="userUsername" ng-model="register.regData.username" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="userPassword">Password <span ng-show="(!regForm.firstPassword.$pristine && regForm.firstPassword.$error.required) || (regForm.$submitted && regForm.firstPassword.$error.required)"> (This field is required)</span></label>
+              <input type="password" class="form-control" name="firstPassword" id="userPassword" ng-model="firstPassword" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="userConfirmPassword">Confirm Password <span ng-show="!confirmed && !regForm.confirmPassword.$pristine && regForm.firstPassword.$valid"> (Passwords don't match)</span></label>
+              <input type="password" class="form-control" name="confirmPassword" id="userConfirmPassword" ng-model="confirm" match="{{[ firstPassword ]}}" ng-change="register.regData.password = confirm" required>
+            </div>
+
+            <div class="container">
+              <p class="text-muted">At least 8 characters. It must contain at least one lowercase character, one uppercase character, one number, and one special character.</p>
+            </div>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="userListServ" ng-model="register.regData.listServ">
+            <label class="custom-control-label" for="userListServ">
+              Would you like to be added to the listserv to receive weekly emails?
+            </label>
+          </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-submit">Submit</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

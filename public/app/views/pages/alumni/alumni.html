@@ -1,0 +1,75 @@
+<div class="container custom-container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Alumni Directory</h1>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="mapid"></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row" ng-if="alumni.alumniArray.length == 0">
+    <div class="col-sm-12">
+      <div class="jumbotron">
+        <p class="text-center">THERE ARE NO ALUMNI ON RECORD AT THIS TIME.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" ng-if="alumni.alumniArray.length != 0">
+    <div class="col-12">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+        <input type="text" class="form-control" ng-model="alumniSearch">
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr class="table-head">
+            <th ng-click="alumni.sortBy('name', alumni.alumniArray)">
+              NAME
+            </th>
+            <th ng-click="alumni.sortBy('undergrad', alumni.alumniArray)">
+              UNDERGRAD. DEGREE
+            </th>
+            <th ng-click="alumni.sortBy('employer', alumni.alumniArray)">
+              EMPLOYER
+            </th>
+            <th ng-click="alumni.sortBy('position', alumni.alumniArray)">
+              TITLE/POSITION
+            </th>
+            <th ng-click="alumni.sortBy('nationality', alumni.alumniArray)">
+              COUNTRY OF ORIGIN
+            </th>
+            <th ng-click="alumni.sortBy('city', alumni.alumniArray)">
+              LOCATION
+            </th>
+            <th class="text-center">LINKEDIN</th>
+          </tr>
+          <tr ng-repeat="alumni in alumni.alumniArray | filter: alumniSearch">
+            <td>{{ alumni.name }}</td>
+            <td>{{ alumni.undergrad }}</td>
+            <td>{{ alumni.employer }}</td>
+            <td>{{ alumni.position }}</td>
+            <td>{{ alumni.nationality }}</td>
+            <td>{{ alumni.city }}, {{ alumni.state }}, {{ alumni.country }}</td>
+            <td class="text-center">
+              <a class="btn btn-submit" href="{{ alumni.linkedIn }}" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

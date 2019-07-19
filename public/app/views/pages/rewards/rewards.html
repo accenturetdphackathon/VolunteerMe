@@ -1,0 +1,197 @@
+<div class="container custom-container">
+  <div class="row">
+    <div class="col-md-8 col-12">
+      <h1>Rewards Program</h1>
+    </div>
+    <div class="col-md-4 col-12">
+      <div class="float-right">
+        <button type="button" class="btn btn-submit" ng-click="main.openRequestModal()">Redeem Points</button>
+        <button type="button" class="btn btn-submit" ng-click="main.openPointsSystemModal()">
+          <i class="fas fa-question"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-12 col-12 col-margin">
+      <div class="container">
+        <h2 class="subtitle">Statistics</h2>
+        <div class="card-group">
+          <div class="card bg-danger">
+            <div class="card-header text-center">
+              FALL
+            </div>
+            <div class="card-body text-center">
+              <p class="card-text">POINTS</p>
+              <h1 class="card-text stat-text">{{ main.fallPoints }}</h1>
+            </div>
+            <div class="card-footer text-center">
+              PERCENTILE: {{ main.fallPercentile }}%
+            </div>
+          </div>
+          <div class="card bg-success">
+            <div class="card-header text-center">
+              SPRING
+            </div>
+            <div class="card-body text-center">
+              <p class="card-text">POINTS</p>
+              <h1 class="card-text stat-text">{{ main.springPoints }}</h1>
+            </div>
+            <div class="card-footer text-center">
+              PERCENTILE: {{ main.springPercentile }}%
+            </div>
+          </div>
+          <div class="card bg-warning">
+            <div class="card-header text-center">
+              SUMMER
+            </div>
+            <div class="card-body text-center">
+              <p class="card-text">POINTS</p>
+              <h1 class="card-text stat-text">{{ main.summerPoints }}</h1>
+            </div>
+            <div class="card-footer text-center">
+              PERCENTILE: {{ main.summerPercentile }}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 col-12">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 class="subtitle">Points Record</h2>
+            <div class="jumbotron" ng-if="main.codeArray.length == 0">
+              <p class="text-center">THERE IS NO POINTS RECORD.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped" ng-if="main.codeArray.length != 0">
+                <tr class="table-head">
+                  <th>EVENT</th>
+                  <th>TYPE</th>
+                  <th class="text-center">SEMESTER</th>
+                  <th class="text-center">POINTS</th>
+                </tr>
+                <tr ng-repeat="event in main.codeArray | orderBy: 'expiration'">
+                  <td>{{ event.name }}</td>
+                  <td>{{ event.type }}</td>
+                  <td class="text-center">{{ event.semester }}</td>
+                  <td class="text-center">{{ event.points }}</td>
+                </tr>
+                <tr class="table-head">
+                  <th>TOTAL POINTS</th>
+                  <th></th>
+                  <th></th>
+                  <th class="text-center">{{ main.points }}</th>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE REQUEST MODAL -->
+<div class="modal fade" id="createRequestModal" aria-labelledby="createRequestLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="createRequestLabel">Redeem Points</h2>
+      </div>
+      <div class="modal-body">
+        <div class="success-message" ng-show="main.successMsg">
+          <div class="alert alert-success">{{ main.successMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="main.errorMsg">
+          <div class="alert alert-danger">{{ main.errorMsg }}</div>
+        </div>
+
+        <form name="createRequestForm" ng-submit="main.createRequest(requestData);" novalidate>
+          <div class="form-group">
+            <label for="requestCode">Event Code <span ng-show="(!createRequestForm.code.$pristine && createRequestForm.code.$error.required) || (createRequestForm.$submitted && createRequestForm.code.$error.required)"> (This field is required)</span></label>
+            <input type="text" class="form-control" name="code" id="requestCode" ng-model="main.requestData.code" required>
+
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <button type="reset" class="btn btn-light" ng-click="main.closeRequestModal(requestData)">Close</button>
+              <button type="submit" class="btn btn-success float-right" ng-if="main.showModal">Submit</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POINTS SYSTEM MODAL -->
+<div class="modal fade" id="pointsSystemModal" aria-labelledby="pointsSystemModalLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="pointsSystemModalLabel">Points System</h2>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tr>
+              <th>EVENT TYPE</th>
+              <th class="text-center">POINTS</th>
+            </tr>
+            <tr>
+              <td>General Body Meeting</td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td>Cabinet Meeting *</td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td>Workshop *</td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td>Form/Survey *</td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td>Social *</td>
+              <td class="text-center">1</td>
+            </tr>
+            <tr>
+              <td>Corporate Event *</td>
+              <td class="text-center">2</td>
+            </tr>
+            <tr>
+              <td>Fundraiser *</td>
+              <td class="text-center">3</td>
+            </tr>
+            <tr>
+              <td>Volunteering *</td>
+              <td class="text-center">4</td>
+            </tr>
+            <tr>
+              <td>Miscellaneous *</td>
+              <td class="text-center">5</td>
+            </tr>
+          </table>
+        </div>
+        <p>* These points must be approved by an officer.</p>
+        <div class="row">
+          <div class="col-sm-12">
+            <button type="reset" class="btn btn-light" ng-click="main.closePointsSystemModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

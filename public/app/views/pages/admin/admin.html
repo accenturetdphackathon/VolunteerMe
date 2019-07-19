@@ -1,0 +1,995 @@
+<div class="container custom-container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Admin Panel</h1>
+      <!-- <h2>{{ main.username }}</h2> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-item nav-item-highlight nav-link active" id="nav-request-tab" data-toggle="tab" data-target="#nav-request" role="tab" aria-controls="nav-request" aria-selected="true">Requests</a>
+          <a class="nav-item nav-item-highlight nav-link" id="nav-member-tab" data-toggle="tab" data-target="#nav-member" role="tab" aria-controls="nav-member" aria-selected="false">Members</a>
+          <a class="nav-item nav-item-highlight nav-link" id="nav-event-tab" data-toggle="tab" data-target="#nav-event" role="tab" aria-controls="nav-event" aria-selected="false">Events</a>
+          <a class="nav-item nav-item-highlight nav-link" id="nav-corporate-tab" data-toggle="tab" data-target="#nav-corporate" role="tab" aria-controls="nav-corporate" aria-selected="false">Corporate Database</a>
+        </div>
+      </nav>
+
+      <div class="tab-content" id="nav-tabContent">
+
+        <!-- REQUESTS -->
+        <div class="tab-pane fade show active" id="nav-request" role="tabpanel" aria-labelledby="nav-request-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" ng-model="requestSearchText">
+                </div>
+              </div>
+              <div class="col-12" ng-if="admin.requests.length != 0">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr class="table-head">
+                      <th>NAME</th>
+                      <th>USERNAME</th>
+                      <th>EVENT</th>
+                      <th>TYPE</th>
+                      <th class="text-center">POINTS</th>
+                      <th class="text-center">APPROVE</th>
+                      <th class="text-center">DENY</th>
+                    </tr>
+                    <tr ng-repeat="request in admin.requests | filter: requestSearchText">
+                      <td>{{ request.lastName }}, {{ request.firstName }}</td>
+                      <td>{{ request.username }}</td>
+                      <td>{{ request.eventName }}</td>
+                      <td>{{ request.type }}</td>
+                      <td class="text-center">{{ request.points }}</td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-outline-success" ng-click="admin.acceptRequest(request)" ng-if="!admin.isClicked">
+                          <i class="fas fa-check"></i>
+                        </button>
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger" ng-click="admin.denyRequest(request)" ng-if="!admin.isClicked">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="admin.requests.length == 0">
+              <div class="col-12">
+                <div class="jumbotron">
+                  <p class="text-center">THERE ARE NO REQUESTS AT THIS TIME.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEMBERS -->
+        <div class="tab-pane fade" id="nav-member" role="tabpanel" aria-labelledby="nav-member-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" ng-model="membersSearchText">
+                </div>
+              </div>
+              <div class="col-12" ng-if="admin.users.length != 0">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr class="table-head">
+                      <th ng-click="admin.sortBy('permission', admin.users)"></th>
+                      <th ng-click="admin.sortBy('lastName', admin.users)">NAME</th>
+                      <th ng-click="admin.sortBy('username', admin.users)">USERNAME</th>
+                      <th ng-click="admin.sortBy('email', admin.users)">EMAIL</th>
+                      <th class="text-center" ng-click="admin.sortBy('fallPoints', admin.users)">FALL POINTS</th>
+                      <th class="text-center" ng-click="admin.sortBy('springPoints', admin.users)">SPRING POINTS</th>
+                      <th class="text-center" ng-click="admin.sortBy('summerPoints', admin.users)">SUMMER POINTS</th>
+                      <th class="text-center" ng-click="admin.sortBy('points', admin.users)">TOTAL POINTS</th>
+                      <th class="text-center">INFO</th>
+                    </tr>
+                    <tr ng-repeat="user in admin.users | filter: membersSearchText">
+                      <td ng-if="user.permission == 'admin'"><i class="fas fa-star fa-admin"></i></td>
+                      <td ng-if="user.permission == 'user'"><i class="far fa-user"></i></td>
+                      <td ng-if="user.permission == 'national'"><i class="fas fa-user"></i></td>
+                      <td>{{ user.lastName }}, {{ user.firstName }}</td>
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.email }}</td>
+                      <td class="text-center">{{ user.fallPoints }}</td>
+                      <td class="text-center">{{ user.springPoints }}</td>
+                      <td class="text-center">{{ user.summerPoints }}</td>
+                      <td class="text-center">{{ user.points }}</td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-submit" ng-click="admin.openUserInfoModal(user.username)">
+                          <i class="fas fa-info"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="admin.users.length == 0">
+              <div class="col-12">
+                <div class="jumbotron">
+                  <p class="text-center">THERE ARE NO MEMBERS AT THIS TIME.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EVENTS -->
+        <div class="tab-pane fade" id="nav-event" role="tabpanel" aria-labelledby="nav-event-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-10">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" ng-model="eventSearchText">
+                </div>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-submit float-right" ng-click="admin.openCreateEventModal()" style="margin-bottom:16px">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+              <div class="col-12" ng-if="admin.codes.length != 0">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr class="table-head">
+                      <th>NAME</th>
+                      <th>CODE</th>
+                      <th>TYPE</th>
+                      <th>EXPIRATION</th>
+                      <th class="text-center">POINTS</th>
+                      <th class="text-center">MANUAL INPUT</th>
+                      <th class="text-center">INFO</th>
+                    </tr>
+                    <tr ng-repeat="code in admin.codes | filter: eventSearchText | orderBy: 'expiration'">
+                      <td>{{ code.name }}</td>
+                      <td>{{ code.code }}</td>
+                      <td>{{ code.type }}</td>
+                      <td>{{ code.expiration | date:'MM/dd/yyyy @ hh:mm a' }}</td>
+                      <td class="text-center">{{ code.points }}</td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-submit" ng-click="admin.openManualInputModal(code)">
+                          <i class="fas fa-i-cursor"></i>
+                        </button>
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-submit" ng-click="admin.openEventInfoModal(code)">
+                          <i class="fas fa-info"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="admin.codes.length == 0">
+              <div class="col-12">
+                <div class="jumbotron">
+                  <p class="text-center">THERE ARE NO EVENTS AT THIS TIME.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CORPORATE DATABASE -->
+        <div class="tab-pane fade" id="nav-corporate" role="tabpanel" aria-labelledby="nav-corporate-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-10">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" ng-model="corporateSearchText">
+                </div>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-submit float-right" ng-click="admin.openAddCompanyModal()" style="margin-bottom:16px">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+              <div class="col-12" ng-if="admin.companies.length != 0">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <tr class="table-head">
+                      <th>NAME</th>
+                      <th class="text-center">SPONSOR</th>
+                      <th class="text-center">FALL BBQ</th>
+                      <th class="text-center">SPRING BBQ</th>
+                      <th class="text-center">NAT. CONV.</th>
+                      <!-- <th class="text-center">EDIT</th> -->
+                      <th class="text-center">REMOVE</th>
+                      <th class="text-center">INFO</th>
+                    </tr>
+                    <tr ng-repeat="company in admin.companies | filter: corporateSearchText | orderBy: 'name'">
+                      <td>{{ company.name }}</td>
+                      <td class="text-center">
+                        <i class="fas fa-check fa-true" ng-if="company.sponsor"></i>
+                        <i class="fas fa-times fa-false" ng-if="!company.sponsor"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fas fa-check fa-true" ng-if="company.bbqFall"></i>
+                        <i class="fas fa-times fa-false" ng-if="!company.bbqFall"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fas fa-check fa-true" ng-if="company.bbqSpring"></i>
+                        <i class="fas fa-times fa-false" ng-if="!company.bbqSpring"></i>
+                      </td>
+                      <td class="text-center">
+                        <i class="fas fa-check fa-true" ng-if="company.national"></i>
+                        <i class="fas fa-times fa-false" ng-if="!company.national"></i>
+                      </td>
+                      <!-- <td class="text-center">
+                        <button type="button" class="btn btn-outline-warning" ng-click="admin.openEditCompanyModal(company._id)">
+                          <i class="far fa-edit"></i>
+                        </button>
+                      </td> -->
+                      <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger" ng-click="admin.openRemoveCompanyModal(company.name)">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-submit" ng-click="admin.openCompanyInfoModal(company._id)">
+                          <i class="fas fa-info"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-if="admin.companies.length == 0">
+              <div class="col-12">
+                <div class="jumbotron">
+                  <p class="text-center">THERE ARE NO COMPANIES AT THIS TIME.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE EVENT MODAL -->
+<div class="modal fade" id="createEventModal" aria-labelledby="createEventLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="createEventLabel">Create Event</h2>
+      </div>
+      <div class="modal-body">
+        <div class="success-message" ng-show="admin.successMsg">
+          <div class="alert alert-success">{{ admin.successMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="admin.errorMsg">
+          <div class="alert alert-danger">{{ admin.errorMsg }}</div>
+        </div>
+
+        <form name="createEventForm" ng-submit="admin.createEvent(eventData);" novalidate>
+          <div class="form-group">
+            <label for="eventName">Event Name</label>
+            <input type="text" class="form-control" name="name" id="eventName" ng-model="admin.eventData.name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="eventCode">Event Code</label>
+            <input type="text" class="form-control" name="code" id="eventCode" ng-model="admin.eventData.code" required>
+          </div>
+
+          <div class="form-group">
+            <label for="eventType">Event Type</label>
+            <select class="form-control" name="type" id="eventType" ng-model="admin.eventData.type" required>
+              <option>General Body Meeting</option>
+              <option>Cabinet Meeting</option>
+              <option>Workshop</option>
+              <option>Social</option>
+              <option>Form/Survey</option>
+              <option>Corporate Event</option>
+              <option>Fundraiser</option>
+              <option>Volunteering</option>
+              <option>Miscellaneous</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="eventExpiration">Expire After</label>
+            <select class="form-control" name="expiration" id="eventExpiration" ng-model="admin.eventData.expiration" required>
+              <option value="1">1 hour</option>
+              <option value="2">2 hours</option>
+              <option value="3">3 hours</option>
+              <option value="4">4 hours</option>
+              <option value="5">5 hours</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <button type="reset" class="btn btn-light" ng-click="admin.closeCreateEventModal(eventData)">Close</button>
+              <button type="submit" class="btn btn-success float-right" ng-if="admin.showCreateEventModal">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENT INFORMATION TABLE -->
+<div class="modal fade" id="eventInfoModal" aria-labelledby="eventInfoModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="eventInfoModalLabel">Event Information</h2>
+      </div>
+      <div class="modal-body">
+        <h4>{{ admin.eventName }}</h4>
+        <p style="text-transform: uppercase">
+          <b>ATTENDANCE:</b> {{ admin.attendance.length }}
+        </p>
+        <div class="jumbotron" ng-if="admin.attendance.length == 0">
+          <p class="text-center">THERE IS NO ATTENDANCE RECORD FOR THIS EVENT AT THIS TIME.</p>
+        </div>
+        <div class="short-table attendance-table" ng-if="admin.attendance.length != 0">
+          <div class="table-responsive">
+            <table class="table table-striped" style="margin-bottom: 0px;">
+              <tr class="table-head">
+                <th>NAME</th>
+                <th>USERNAME</th>
+                <th>EMAIL</th>
+              </tr>
+              <tr ng-repeat="user in admin.attendance | orderBy: 'lastName'">
+                <td>{{ user.lastName }}, {{ user.firstName }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button type="reset" class="btn btn-light" ng-click="admin.closeEventInfoModal()">Close</button>
+            <button type="button" class="btn btn-excel float-right" ng-click="admin.excel(admin.eventId);" ng-if="admin.attendance.length != 0">
+              <i class="far fa-file-excel"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANUAL INPUT MODAL -->
+<div class="modal fade" id="manualInputModal" aria-labelledby="manualInputModalLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="manualInputLabel">Manual Input</h2>
+      </div>
+      <div class="modal-body">
+        <h4>{{ admin.eventName.name }}</h4>
+        <div class="success-message" ng-show="admin.successMsg">
+          <div class="alert alert-success">{{ admin.successMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="admin.errorMsg">
+          <div class="alert alert-danger">{{ admin.errorMsg }}</div>
+        </div>
+
+        <form name="manualInputForm" ng-submit="admin.manualInput(member);" novalidate>
+          <div class="form-group">
+            <label for="memberUsername">Member's Username</label>
+            <input type="text" class="form-control" name="name" id="memberUsername" ng-model="admin.member.userName" required>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <button type="reset" class="btn btn-light" ng-click="admin.closeManualInputModal(user)">Close</button>
+              <button type="submit" class="btn btn-success float-right">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER INFORMATION MODAL -->
+<div class="modal fade" id="userEventsModal" aria-labelledby="userEventsModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="userEventsModal">
+          Member Information
+        </h2>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <h3>{{ admin.user.firstName}} {{ admin.user.lastName}}</h3>
+          </div>
+          <div class="col-lg-6 col-12 col-margin">
+            <img class="img-thumbnail" src="../../assets/images/profile.png">
+          </div>
+          <div class="col-lg-6 col-12">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>Username</td>
+                  <td>{{ admin.user.username }}</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{{ admin.user.email }}</td>
+                </tr>
+                <tr>
+                  <td>Major</td>
+                  <td>{{ admin.user.major }}</td>
+                </tr>
+                <tr>
+                  <td>Year</td>
+                  <td>{{ admin.user.year }}</td>
+                </tr>
+                <tr>
+                  <td>Country of Origin</td>
+                  <td>{{ admin.user.nationality }}</td>
+                </tr>
+                <tr>
+                  <td>Ethnicity</td>
+                  <td>{{ admin.user.ethnicity }}</td>
+                </tr>
+                <tr>
+                  <td>Sex</td>
+                  <td>{{ admin.user.sex }}</td>
+                </tr>
+                <tr>
+                  <td>ListServ</td>
+                  <td ng-if="admin.user.listServ">Yes</td>
+                  <td ng-if="!admin.user.listServ">No</td>
+                </tr>
+                <tr>
+                  <td>Permission</td>
+                  <td ng-if="admin.user.permission == 'user'">User</td>
+                  <td ng-if="admin.user.permission == 'national'">National Member</td>
+                  <td ng-if="admin.user.permission == 'admin'">Administrator</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row text-center" style="margin-bottom : 16px">
+              <div class="container" ng-if="admin.user.username != main.username">
+                <button type="button" class="btn btn-submit btn-block" ng-hide="admin.user.permission == 'user'" ng-click="admin.changePermission(admin.user.username, 'user')">Make User</button>
+                <button type="button" class="btn btn-submit btn-block" ng-hide="admin.user.permission == 'national'" ng-click="admin.changePermission(admin.user.username,'national')">Make National Member</button>
+                <button type="button" class="btn btn-submit btn-block" ng-hide="admin.user.permission == 'admin'" ng-click="admin.changePermission(admin.user.username , 'admin')">Make Administrator </button>
+              </div>
+              <div class="container" ng-if="admin.user.username == main.username">
+                <button type="button" class="btn btn-submit btn-block disabled" aria-disabled="true" ng-hide="admin.user.permission == 'user'">Make User</button>
+                <button type="button" class="btn btn-submit btn-block disabled" aria-disabled="true" ng-hide="admin.user.permission == 'national'">Make National Member</button>
+                <button type="button" class="btn btn-submit btn-block disabled" aria-disabled="true" ng-hide="admin.user.permission == 'admin'">Make Administrator </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="jumbotron" ng-if="admin.eventArray.length == 0">
+              <p class="text-center">THIS USER HAS NO ATTENDANCE RECORD.</p>
+            </div>
+            <div class="short-table user-events-table" ng-if="admin.eventArray.length != 0">
+              <div class="table-responsive">
+                <table class="table table-striped" style="margin-bottom: 0px;">
+                  <tr class="table-head">
+                    <th>EVENT</th>
+                    <th>TYPE</th>
+                    <th class="text-center">SEMESTER</th>
+                    <th class="text-center">POINTS</th>
+                  </tr>
+                  <tr ng-repeat="event in admin.eventArray | orderBy: 'expiration'">
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.type }}</td>
+                    <td class="text-center">{{ event.semester }}</td>
+                    <td class="text-center">{{ event.points }}</td>
+                  </tr>
+                  <tr class="table-head">
+                    <th>TOTAL POINTS</th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center">{{ admin.user.points }}</th>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button type="reset" class="btn btn-light" ng-click="admin.closeUserInfoModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD A COMPANY -->
+<div class="modal fade" id="addCompanyModal" aria-labelledby="addCompanyModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="addCompanyModalLabel">Add a Company</h2>
+      </div>
+      <div class="modal-body">
+        <div class="success-message" ng-show="admin.addCompanySuccessMsg">
+          <div class="alert alert-success">{{ admin.addCompanySuccessMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="admin.addCompanyErrorMsg">
+          <div class="alert alert-danger">{{ admin.addCompanyErrorMsg }}</div>
+        </div>
+
+        <form name="addCompanyForm" ng-submit="admin.addCompany(company);" novalidate>
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyName">Name</label>
+              <input type="text" class="form-control" name="name" id="companyName" ng-model="company.name">
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyLogo">Logo</label>
+              <input type="file" class="form-control-file" name="logo" id="companyLogo" ng-model="company.logo" ng-file-select="onFileSelect($files)">
+              <!-- <img class="col-12 img-fluid" ng-src="{{ company.logo }}"> -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="companySlogan">Slogan</label>
+            <input type="text" class="form-control" name="slogan" id="companySlogan" ng-model="company.slogan">
+            <small id="companySloganHelp" class="form-text text-muted">
+              Please do not use quotes.
+            </small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyMajors">Majors</label>
+              <select multiple class="form-control" name="majors" id="companyMajors" ng-model="company.majors">
+                <option ng-repeat="major in admin.majors">{{ major }}</option>
+              </select>
+              <small id="companyMajorsHelp" class="form-text text-muted">
+                Hold down the <kbd>CTRL</kbd> (Windows) or <kbd>CMD</kbd> (Mac) button to select multiple items.
+              </small>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyIndustry">Industries</label>
+              <select multiple class="form-control" name="industry" id="companyIndustry" ng-model="company.industry">
+                <option ng-repeat="industry in admin.industries">{{ industry }}</option>
+              </select>
+              <small id="companyIndustryHelp" class="form-text text-muted">
+                Hold down the <kbd>CTRL</kbd> (Windows) or <kbd>CMD</kbd> (Mac) button to select multiple items.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyOverview">Overview</label>
+              <textarea class="form-control" name="overview" id="companyOverview" ng-model="company.overview" rows="3"></textarea>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyMission">Mission</label>
+              <textarea class="form-control" name="mission" id="companyMission" ng-model="company.mission" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyGoals">Goals</label>
+              <textarea class="form-control" name="goals" id="companyGoals" ng-model="company.goals" rows="3"></textarea>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyModel">Business Model/Operations Highlights</label>
+              <textarea class="form-control" name="model" id="companyModel" ng-model="company.model" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyNews">News Link</label>
+              <input type="text" class="form-control" name="news" id="companyNews" ng-model="company.news">
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyApply">Apply Link</label>
+              <input type="text" class="form-control" name="apply" id="companyApply" ng-model="company.apply">
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 16px">
+            <div class="col-12">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="academia" id="academiaSwitch" ng-model="company.academia">
+                <label class="custom-control-label" for="academiaSwitch">Academia</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="government" id="govSwitch" ng-model="company.government">
+                <label class="custom-control-label" for="govSwitch">Government</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="nonprofit" id="nonprofitSwitch" ng-model="company.nonprofit">
+                <label class="custom-control-label" for="nonprofitSwitch">Non-profit</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="visa" id="visaSwitch" ng-model="company.visa">
+                <label class="custom-control-label" for="visaSwitch">Providing Visa Sponsorship</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="sponsor" id="sponsorSwitch" ng-model="company.sponsor">
+                <label class="custom-control-label" for="sponsorSwitch">SHPE UF Sponsor</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="ipc" id="ipcSwitch" ng-model="company.ipc">
+                <label class="custom-control-label" for="ipcSwitch">Industry Partnership Council</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="bbqFall" id="bbqFallSwitch" ng-model="company.bbqFall">
+                <label class="custom-control-label" for="bbqFallSwitch">Attending Fall BBQ with Industry</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="bbqSpring" id="bbqSpringSwitch" ng-model="company.bbqSpring">
+                <label class="custom-control-label" for="bbqSpringSwitch">Attending Spring BBQ with Industry</label>
+              </div>
+
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="national" id="nationalSwitch" ng-model="company.national">
+                <label class="custom-control-label" for="nationalSwitch">Attending National Convention</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <button type="reset" class="btn btn-light" ng-click="admin.closeAddCompanyModal()">Close</button>
+              <button type="submit" class="btn btn-success float-right">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT A COMPANY -->
+<!-- <div class="modal fade" id="editCompanyModal" aria-labelledby="editCompanyModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="editCompanyModalLabel">Edit Company</h2>
+      </div>
+      <div class="modal-body">
+        <h3>{{ admin.editCompanyData.name }}</h3>
+        <div class="success-message" ng-show="admin.editCompanySuccessMsg">
+          <div class="alert alert-success">{{ admin.editCompanySuccessMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="admin.editCompanyErrorMsg">
+          <div class="alert alert-danger">{{ admin.editCompanyErrorMsg }}</div>
+        </div>
+
+        <form name="editCompanyForm" ng-submit="admin.editCompany(editCompany);" novalidate>
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyName">Name</label>
+              <input type="text" class="form-control" name="name" id="companyName" placeholder="{{ admin.editCompanyData.name }}" ng-model="editCompany.name">
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyLogo">Logo</label>
+              <input type="file" class="form-control-file" name="logo" id="companyLogo" ng-model="editCompany.logo" ng-file-select="onFileSelect($files)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="companySlogan">Slogan</label>
+            <input type="text" class="form-control" name="slogan" id="companySlogan" placeholder="{{ admin.editCompanyData.slogan }}" ng-model="editCompany.slogan">
+            <small id="companySloganHelp" class="form-text text-muted">
+              Please do not use quotes.
+            </small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyMajors">Majors</label>
+              <select multiple class="form-control" name="majors" id="companyMajors" ng-model="editCompany.majors">
+                <option ng-repeat="major in admin.majors">{{ major }}</option>
+              </select>
+              <small id="companyMajorsHelp" class="form-text text-muted">
+                Hold down the <kbd>CTRL</kbd> (Windows) or <kbd>CMD</kbd> (Mac) button to select multiple items.
+              </small>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyIndustry">Industries</label>
+              <select multiple class="form-control" name="industry" id="companyIndustry" ng-model="editCompany.industry">
+                <option ng-repeat="industry in admin.industries">{{ industry }}</option>
+              </select>
+              <small id="companyIndustryHelp" class="form-text text-muted">
+                Hold down the <kbd>CTRL</kbd> (Windows) or <kbd>CMD</kbd> (Mac) button to select multiple items.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyOverview">Overview</label>
+              <textarea class="form-control" name="overview" id="companyOverview" placeholder="{{ admin.editCompanyData.overview }}" ng-model="editCompany.overview" rows="3"></textarea>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyMission">Mission</label>
+              <textarea class="form-control" name="mission" id="companyMission" placeholder="{{ admin.editCompanyData.mission }}" ng-model="editCompany.mission" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyGoals">Goals</label>
+              <textarea class="form-control" name="goals" id="companyGoals" placeholder="{{ admin.editCompanyData.goals }}" ng-model="editCompany.goals" rows="3"></textarea>
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyModel">Business Model/Operations Highlights</label>
+              <textarea class="form-control" name="model" id="companyModel" placeholder="{{ admin.editCompanyData.model }}" ng-model="editCompany.model" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyNews">News Link</label>
+              <input type="text" class="form-control" name="news" id="companyNews" placeholder="{{ admin.editCompanyData.news }}" ng-model="editCompany.news">
+            </div>
+
+            <div class="form-group col-12 col-lg-6">
+              <label for="companyApply">Apply Link</label>
+              <input type="text" class="form-control" name="apply" id="companyApply" placeholder="{{ admin.editCompanyData.apply }}" ng-model="editCompany.apply">
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 16px">
+            <div class="col-12">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="academia" id="academiaSwitch" ng-model="editCompany.academia">
+                <label class="custom-control-label" for="academiaSwitch">Academia</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="government" id="govSwitch" ng-model="editCompany.government">
+                <label class="custom-control-label" for="govSwitch">Government</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="nonprofit" id="nonprofitSwitch" ng-model="editCompany.nonprofit">
+                <label class="custom-control-label" for="nonprofitSwitch">Non-profit</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="visa" id="visaSwitch" ng-model="editCompany.visa">
+                <label class="custom-control-label" for="visaSwitch">Providing Visa Sponsorship</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="sponsor" id="sponsorSwitch" ng-model="editCompany.sponsor">
+                <label class="custom-control-label" for="sponsorSwitch">SHPE UF Sponsor</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="ipc" id="ipcSwitch" ng-model="editCompany.ipc">
+                <label class="custom-control-label" for="ipcSwitch">Industry Partnership Council</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="bbqFall" id="bbqFallSwitch" ng-model="editCompany.bbqFall">
+                <label class="custom-control-label" for="bbqFallSwitch">Attending Fall BBQ with Industry</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="bbqSpring" id="bbqSpringSwitch" ng-model="editCompany.bbqSpring">
+                <label class="custom-control-label" for="bbqSpringSwitch">Attending Spring BBQ with Industry</label>
+              </div>
+
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="national" id="nationalSwitch" ng-model="editCompany.national">
+                <label class="custom-control-label" for="nationalSwitch">Attending National Convention</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <button type="reset" class="btn btn-light" ng-click="admin.closeEditCompanyModal()">Close</button>
+              <button type="submit" class="btn btn-success float-right">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- REMOVE COMPANY MODAL -->
+<div class="modal fade" id="removeCompanyModal" aria-labelledby="removeCompanyModalLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="removeCompanyLabel">Remove Company</h2>
+      </div>
+      <div class="modal-body">
+        <div class="success-message" ng-show="admin.removeCompanySuccessMsg">
+          <div class="alert alert-success">{{ admin.removeCompanySuccessMsg }}</div>
+        </div>
+
+        <div class="error-message" ng-show="admin.removeCompanyErrorMsg">
+          <div class="alert alert-danger">{{ admin.removeCompanyErrorMsg }}</div>
+        </div>
+
+        <form name="removeCompanyForm" ng-submit="admin.removeCompany(admin.companyName);" novalidate>
+          <p>Are you sure you want to remove <b>{{ admin.companyName }}</b> from the Corporate Database?</p>
+
+          <div class="row">
+            <div class="col-12">
+              <button type="reset" class="btn btn-light" ng-click="admin.closeRemoveCompanyModal()">No, keep company</button>
+              <button type="submit" class="btn btn-danger float-right">Yes, remove company</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MORE COMPANY INFO MODAL -->
+<div class="modal fade" id="moreInfoModal" aria-labelledby="moreInfoModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="moreInfoModal">Company Information</h2>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <h3>{{ admin.company.name }}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-4">
+            <img class="img-fluid img-logo" ng-src="{{ admin.company.logo }}">
+            <div ng-if="admin.company.slogan">
+              <h4>Slogan</h4>
+              <p>"{{ admin.company.slogan }}"</p>
+            </div>
+            <h4>Majors</h4>
+            <p>{{ admin.company.majorsList }}</p>
+            <h4>Industries</h4>
+            <p>{{ admin.company.industryList }}</p>
+          </div>
+          <div class="col-12 col-lg-8">
+            <div ng-if="admin.company.overview">
+              <h4>Overview</h4>
+              <p>{{ admin.company.overview }}</p>
+            </div>
+            <div ng-if="admin.company.mission">
+              <h4>Mission</h4>
+              <p>{{ admin.company.mission }}</p>
+            </div>
+            <div ng-if="admin.company.goals">
+              <h4>Goals</h4>
+              <p>{{ admin.company.goals }}</p>
+            </div>
+            <div ng-if="admin.company.model">
+              <h4>Business Model/Operations Highlights</h4>
+              <p>{{ admin.company.model }}</p>
+            </div>
+            <div class="row" style="margin-bottom: 16px;">
+              <div class="col-6">
+                <h4>News Link</h4>
+                <a href="{{ admin.company.news }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+              <div class="col-6">
+                <h4>Apply Link</h4>
+                <a href="{{ admin.company.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+              </div>
+            </div>
+            <h4>Other Information</h4>
+            <div class="row" style="margin-bottom: 16px;">
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.academia"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.academia"></i>
+                Academia
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.government"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.government"></i>
+                Government Department/Contractor
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.nonprofit"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.nonprofit"></i>
+                Non-profit Organization
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.visa"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.visa"></i>
+                Providing Visa Sponsorship
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.sponsor"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.sponsor"></i>
+                SHPE UF Sponsor
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.ipc"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.ipc"></i>
+                Industry Partnership Council
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.bbqFall"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.bbqFall"></i>
+                Attending Fall BBQ with Industry
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.bbqSpring"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.bbqSpring"></i>
+                Attending Spring BBQ with Industry
+              </div>
+              <div class="col-12">
+                <i class="fas fa-check fa-true" ng-if="admin.company.national"></i>
+                <i class="fas fa-times fa-false" ng-if="!admin.company.national"></i>
+                Attending SHPE National Convention
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="button" class="btn btn-light" ng-click="admin.closeCompanyInfoModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
