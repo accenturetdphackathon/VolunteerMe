@@ -55,26 +55,6 @@ var UserSchema = new Schema({
     required: true,
     validate: lastNameValidator
   },
-  major: {
-    type: String,
-    required: true
-  },
-  year: {
-    type: String,
-    required: true
-  },
-  nationality: {
-    type: String,
-    required: true
-  },
-  ethnicity: {
-    type: String,
-    required: true
-  },
-  sex: {
-    type: String,
-    required: true
-  },
   email: {
     type: String,
     lowercase: true,
@@ -98,42 +78,19 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  fallPoints: {
-    type: Number,
-    default: 0
-  },
-  springPoints: {
-    type: Number,
-    default: 0
-  },
-  summerPoints: {
-    type: Number,
-    default: 0
-  },
   resettoken: {
     type: String,
     required: false
   },
   permission: {
     type: String,
-    require: ["user", "admin", "national"],
+    require: ["user", "admin"],
     default: 'user'
-  },
-  listServ: {
-    type: Boolean,
-    default: false
   },
   events: [{
     event: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Code'
-    }
-  }],
-  bookmarks: [{
-    company: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Company',
-      unique: true
     }
   }]
 });
