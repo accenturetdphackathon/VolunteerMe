@@ -91,6 +91,13 @@ var UserSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Code'
     }
+  }],
+  bookmarks: [{
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Org',
+      unique: true
+    }
   }]
 });
 

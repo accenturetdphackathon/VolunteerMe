@@ -8,7 +8,7 @@
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-item-highlight nav-link active" id="nav-company-tab" data-toggle="tab" data-target="#nav-company" role="tab" aria-controls="nav-company" aria-selected="false">Organizations</a>
-      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">My Faves</a>
+      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">My Causes</a>
     </div>
   </nav>
 
@@ -80,20 +80,20 @@
             <h2>{{ bookmark.name }}</h2>
             <div class="row" style="margin-bottom: 16px">
               <div class="col-12">
-                <p>{{ bookmark.overview }}</p>
+                <p>{{ bookmark.description }}</p>
               </div>
               <div class="col-6">
-                <h4>News Link</h4>
-                <a href="{{ bookmark.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+                <h4>Website</h4>
+                <a href="{{ bookmark.website }}" target="_blank" style="display: inline-block;">Click here</a>
               </div>
               <div class="col-6">
-                <h4>Apply Link</h4>
-                <a href="{{ bookmark.apply }}" target="_blank" style="display: inline-block;">Click here</a>
+                <h4>Email</h4>
+                <a href="{{ bookmark.email }}" target="_blank" style="display: inline-block;">Click here</a>
               </div>
             </div>
           </div>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Organization Profile</button>
+            <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Profile</button>
             <button type="button" class="btn btn-block btn-outline-danger" ng-click="corporate.removeBookmark(bookmark._id)">Remove</button>
           </div>
           <div class="col-12">
@@ -144,8 +144,8 @@
         <div class="row">
           <div class="col-12">
             <button type="button" class="btn btn-light" ng-click="corporate.closeMoreInfoModal()">Close</button>
-            <button type="button" class="btn btn-success float-right" ng-if="!corporate.company.bookmark" ng-click="corporate.addBookmark(corporate.company._id)">Add Bookmark</button>
-            <button type="button" class="btn btn-danger float-right" ng-if="corporate.company.bookmark" ng-click="corporate.removeBookmark(corporate.company._id)">Remove Bookmark</button>
+            <button type="button" class="btn btn-success float-right" ng-if="!corporate.company.bookmark" ng-click="corporate.addBookmark(corporate.company._id)">Add to My Causes</button>
+            <button type="button" class="btn btn-danger float-right" ng-if="corporate.company.bookmark" ng-click="corporate.removeBookmark(corporate.company._id)">Remove from My Causes</button>
           </div>
         </div>
       </div>

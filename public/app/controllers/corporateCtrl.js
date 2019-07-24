@@ -135,6 +135,8 @@ angular.module('corporateController', ['userServices', 'authServices'])
               }
             });
           }
+
+          console.log(app.bookmarks);
         }
       });
     }

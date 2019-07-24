@@ -1323,5 +1323,94 @@ module.exports = function(router) {
     });
   });
 
+  router.put('/addbookmark/:companyId', function(req, res) {
+    User.findOne({
+      username: req.decoded.username
+    }, function(err, user) {
+      if (err) throw err;
+
+      var isDuplicate = false;
+
+      for (var i = 0; i < user.bookmarks.length; i++) {
+        if (req.body.companyId == user.bookmarks[i]._id) {
+          isDuplicate = true;
+          break;
+        }
+      }
+
+      if (isDuplicate) {
+        res.json({
+          success: false
+        });
+      } else {
+        User.findOneAndUpdate({
+          username: req.decoded.username
+        }, {
+          $push: {
+            bookmarks: {
+              _id: req.params.companyId
+            }
+          }
+        }, function(err, newUser) {
+          if (err) throw err;
+
+          console.log(newUser);
+
+          if (!newUser) {
+            res.json({
+              success: false
+            });
+          } else {
+            res.json({
+              success: true,
+              message: "Hello"
+            });
+          }
+        });
+      }
+    });
+  });
+
+
+  router.get('/getbookmarkinfo/:companyId', function(req, res) {
+    Org.findOne({
+      _id: req.params.companyId
+    }, function(err, company) {
+      if (err) throw err;
+
+      res.json({
+        success: true,
+        message: company
+      });
+    });
+  });
+
+  router.put('/removebookmark/:companyId', function(req, res) {
+    User.updateOne({
+      username: req.decoded.username
+    }, {
+      $pull: {
+        bookmarks: {
+          _id: req.params.companyId
+        }
+      }
+    }, function(err, user) {
+      if (err) throw err;
+
+      User.findOne({
+        username: req.decoded.username
+      }, function(err, updatedUser) {
+        if (err) throw err;
+
+        console.log(updatedUser.bookmarks);
+
+        res.json({
+          success: true,
+          message: updatedUser.bookmarks
+        });
+      });
+    });
+  });
+
   return router;
 };
