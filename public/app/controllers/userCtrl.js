@@ -3,7 +3,7 @@ angular.module('userControllers', ['userServices'])
 
     var app = this;
 
-    this.regUser = function(regData) {
+    app.regVolunteer = function(regData) {
       app.errorMsg = false;
 
       User.create(app.regData).then(function(data) {

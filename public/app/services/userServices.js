@@ -201,6 +201,10 @@ angular.module('userServices', [])
       return $http.put('api/removebookmark/' + companyId);
     };
 
+    userFactory.createOrg = function(orgData) {
+      return $http.post('api/createorg/', orgData);
+    }
+
     return userFactory;
 
 

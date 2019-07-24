@@ -6,6 +6,7 @@ var Code = require('../models/code');
 var Request = require('../models/request');
 var Alumni = require('../models/alumni');
 var Company = require('../models/company');
+var Org = require('../models/organization');
 
 // NPM PACKAGES
 var jwt = require('jsonwebtoken');
@@ -105,6 +106,36 @@ module.exports = function(router) {
         }
       });
     }
+  });
+
+  router.post('/createorg', function(req, res) {
+    var org = new Org();
+    org.name = req.body.name;
+    org.email = req.body.email;
+    org.website = req.body.website;
+    org.phone = req.body.phone;
+    org.description = req.body.description;
+    org.category = req.body.category;
+    org.address = req.body.address;
+    org.city = req.body.city;
+    org.state = req.body.state;
+    org.zip = req.body.zip;
+    org.username = req.body.username;
+    org.password = req.body.password;
+    org.logo = req.body.logo;
+
+    org.save(function(err) {
+      if (err)
+        throw err;
+
+      else {
+        res.json({
+          success: true,
+          message: "Organization successfully created"
+        })
+      }
+    });
+
   });
 
   // ENDPOINT TO CREATE EVENT CODES
@@ -209,9 +240,41 @@ module.exports = function(router) {
       if (err) throw err;
 
       if (!user) {
-        res.json({
-          success: false,
-          message: 'User not found'
+
+        Org.findOne({
+          username: req.body.username
+        }).select().exec(function(err, org) {
+          if (err) throw err;
+
+          if (!org) {
+            res.json({
+              success: false,
+              message: 'Organization not found'
+            });
+          } else {
+            var validPassword = org.comparePassword(req.body.password);
+
+            if (!validPassword) {
+              res.json({
+                success: false,
+                message: 'Wrong password'
+              });
+            } else {
+
+              var token = jwt.sign({
+                username: org.username,
+                email: org.email
+              }, secret, {
+                expiresIn: '1h'
+              });
+
+              res.json({
+                success: true,
+                message: 'Organization authenticated',
+                token: token
+              });
+            }
+          }
         });
       } else if (user) {
         if (!req.body.password) {
@@ -456,11 +519,19 @@ module.exports = function(router) {
 
   // ENDPOINT TO SEND USER PROFILE INFORMATION
   router.post('/me', function(req, res) {
-    User.findOne({
-      username: req.decoded.username
-    }).select().exec(function(err, user) {
-      res.send(user);
-    });
+    if (req.decoded.username == 'shpeuf') {
+      Org.findOne({
+        username: req.decoded.username
+      }).select().exec(function(err, org) {
+        res.send(org);
+      });
+    } else {
+      User.findOne({
+        username: req.decoded.username
+      }).select().exec(function(err, user) {
+        res.send(user);
+      });
+    }
   });
 
   // ENDPOINT TO RENEW THE USER TOKEN
@@ -1222,6 +1293,32 @@ module.exports = function(router) {
       if (err) throw err;
       res.json({
         success: true
+      });
+    });
+  });
+
+  router.get('/getcompanies/', function(req, res) {
+    Org.find({
+
+    }, function(err, company) {
+      if (err) throw err;
+
+      res.json({
+        success: true,
+        message: company
+      })
+    })
+  });
+
+  router.get('/getcompanyinfo/:companyId', function(req, res) {
+    Org.findOne({
+      _id: req.params.companyId
+    }, function(err, company) {
+      if (err) throw err;
+
+      res.json({
+        success: true,
+        message: company
       });
     });
   });

@@ -1,6 +1,6 @@
 @font-face {
   font-family: "heading-font";
-  src: url(../fonts/UniSansBold.otf);
+  src: url(../fonts/CiutadellaBold.ttf);
 }
 
 @font-face {
@@ -29,7 +29,7 @@ html {
   width: 100%;
   height: 40px;
   line-height: 40px;
-  background-color: #003050;
+  background-color: #2D2D2D;
 }
 
 .footer-text {
@@ -43,7 +43,7 @@ html {
 }
 
 .navbar {
-  border-image: linear-gradient(to right, #EB4616 40%, #00BCE4 60%);
+  border-image: linear-gradient(to right, #FFB600 40%, #FFB600 60%);
   border-image-slice: 1;
   border-width: 3px;
   border-right-width: 0px;
@@ -53,12 +53,12 @@ html {
 }
 
 .navbar-dark, .bg-dark {
-  background-color: #003350 !important;
+  background-color: #2E2E2E !important;
 }
 
 .navbar-brand {
-  font-family: 'heading-font';
-  font-size: 1.2rem;
+  font-family: 'heading-font' !important;
+  font-size: 2rem;
   vertical-align: text-bottom;
 }
 
@@ -67,13 +67,13 @@ html {
 }
 
 h1, h2, h3, h4, h5 {
-  color: #EB4616;
+  color: #FFB600;
   font-family: 'heading-font';
   text-transform: uppercase;
 }
 
 hr {
-  background-color: #003050;
+  background-color: #2D2D2D;
 }
 
 .home-title {
@@ -88,7 +88,7 @@ hr {
 }
 
 .team-title {
-  background-image: url(../images/team-bg.jpg);
+  background-image: url(../images/home-bg.jpg);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -136,40 +136,40 @@ hr {
 }
 
 .register-bg {
-  background-image: url(../images/register-bg.jpg);
+  background-image: url(../images/background-2.jpg);
 }
 
 .login-bg {
-  background-image: url(../images/login-bg.jpg);
+  background-image: url(../images/background-2.jpg);
 }
 
 .username-bg {
-  background-image: url(../images/username-bg.jpg);
+  background-image: url(../images/background-2.jpg);
 }
 
 .password-bg {
-  background-image: url(../images/password-bg.jpg);
+  background-image: url(../images/background-2.jpg);
 }
 
 .reset-bg {
-  background-image: url(../images/reset-bg.jpg);
+  background-image: url(../images/background-2.jpg);
 }
 
 .full-height {
   align-items: center;
   display: flex;
-  min-height: calc(100vh - 64px - 40px);
+  min-height: calc(100vh - 77px - 40px);
 }
 
 .btn-submit {
-  border-color: #EB4616;
-  color: #EB4616;
+  border-color: #FFB600 !important;
+  color: #FFB600 !important;
 }
 
 .btn-submit:hover {
-  background-color: #EB4616;
-  border-color: #EB4616;
-  color: #FFFFFF;
+  background-color: #FFB600 !important;
+  border-color: #FFB600 !important;
+  color: #FFFFFF !important;
 }
 
 .btn-excel {
@@ -222,20 +222,22 @@ hr {
 }
 
 .nav-name {
-  color: #00BCE4 !important;
+  color: #FFB600 !important;
   text-transform: uppercase;
 }
 
-/* .nav-name:hover {
-  color: #EB4616 !important;
-} */
-.admin-text {
-  color: #00BCE4 !important;
+.nav-name:hover {
+  color: #FFB600 !important;
 }
 
-/* .admin-text:hover {
-  color: #EB4616 !important;
-} */
+.admin-text {
+  color: #FFB600 !important;
+}
+
+.admin-text:hover {
+  color: #FFB600 !important;
+}
+
 .tab-pane {
   padding: 30px 10px 30px 10px;
 }
@@ -295,12 +297,12 @@ iframe {
 
 .a {
   text-decoration: none !important;
-  color: #EB4616;
+  color: #FFB600;
 }
 
 .a:hover {
   text-decoration: none !important;
-  color: #EB4616;
+  color: #FFB600;
 }
 
 .short-table {
@@ -330,7 +332,7 @@ iframe {
 .sk-cube-grid .sk-cube {
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
   animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-  background-color: #EB4616;
+  background-color: #FFB600;
   float: left;
   height: 33%;
   width: 33%;
@@ -416,7 +418,7 @@ iframe {
 .all-caps {
   text-transform: uppercase;
   font-size: 1.2rem;
-  color: #EB4616;
+  color: #FFB600;
   font-family: 'body-font';
 }
 
@@ -431,19 +433,23 @@ iframe {
 }
 
 .row-feature {
-  border-color: #00BCE4;
+  border-color: #FFB600;
 }
 
 .navy {
-  color: #003050;
+  color: #2D2D2D;
 }
 
 .orange {
-  color: #EB4616;
+  color: #FFB600;
 }
 
 .turquoise {
-  color: #00BCE4;
+  color: #FFB600;
+}
+
+span {
+  color: #FFB600;
 }
 
 .white {
@@ -553,17 +559,17 @@ a {
 }
 
 a {
-  color: #00BCE4;
+  color: #FFB600;
 }
 
 a:hover {
-  color: #0094B6;
+  color: #FF8200;
 }
 
 .img-company {
   width: 100%;
-  height: 20rem;
-  max-height: 240px;
+  height: 40rem;
+  max-height: 360px;
   object-fit: contain;
   padding: 12px 12px 12px 12px;
 }
@@ -592,7 +598,7 @@ canvas {
 .nav-link.active, .nav-item-highlight.show .nav-link {
   background-color: #FFFFFF !important;
   border-top-width: 3px !important;
-  border-top-color: #00BCE4 !important;
+  border-top-color: #FFB600 !important;
 }
 
 .nav-item-highlight {

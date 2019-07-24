@@ -5,7 +5,7 @@
   <base href="/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="theme-color" content="#003050"/>
+  <meta name="theme-color" content="#003050" />
   <link rel="shortcut icon" type="image/png" href="../../../assets/images/favicon.png" />
 
   <title>MemberSHPE UF</title>
@@ -64,7 +64,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top module-border-wrap">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="../../assets/images/membershpe_logo.png" height="35" class="d-inline-block align-top">
+        VOLUNTEER<span>ME</span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -81,21 +81,21 @@
             <a class="nav-link" href="#" ng-show="main.isLoggedIn" ng-click="main.logout()">Logout</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link nav-name dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="main.isLoggedIn">{{ main.firstName }} {{ main.lastName }}</a>
+            <a class="nav-link nav-name dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-show="main.isLoggedIn">{{ main.username }}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item admin-text" href="/admin" ng-show="main.authorized && main.isLoggedIn">Admin Panel</a>
               <a class="dropdown-item admin-text" href="/statistics" ng-show="main.authorized && main.isLoggedIn">Statistics</a>
               <a class="dropdown-item" href="/profile">My Profile</a>
-              <a class="dropdown-item" href="/rewards">Rewards Program</a>
+              <a class="dropdown-item" href="/rewards">My Wall</a>
               <a class="dropdown-item" href="/alumni">Alumni Directory</a>
-              <!-- <a class="dropdown-item" href="/resume">Résumé Repository</a> -->
-              <a class="dropdown-item" href="/corporate">Corporate Database</a>
+              <a class="dropdown-item" href="/corporate">Organizations</a>
             </div>
           </li>
         </ul>
       </div>
     </div>
   </nav>
+
 
   <div class="ng-view"></div>
 
@@ -130,15 +130,13 @@
   <footer class="footer">
     <div class="container">
       <div class="row">
-        <div class="col-5 col-sm-6">
+        <div class="col-4 col-sm-6">
           <a href="/team">
             <p class="footer-text float-left">Meet the team</p>
           </a>
         </div>
-        <div class="col-7 col-sm-6">
-          <a href="http://www.shpeuf.com" target="_blank">
-            <p class="footer-text float-right">Made with <span style="color: #FF0000;">&#9829;</span> @ UF</p>
-          </a>
+        <div class="col-8 col-sm-6">
+          <p class="footer-text float-right">Made with <span style="color: #FF0000;">&#9829;</span> in Accenture Chicago</p>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 <div class="container custom-container">
   <div class="row">
     <div class="col-12">
-      <h1>Corporate Database</h1>
+      <h1>Organizations Database</h1>
     </div>
   </div>
 
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-item nav-item-highlight nav-link active" id="nav-company-tab" data-toggle="tab" data-target="#nav-company" role="tab" aria-controls="nav-company" aria-selected="false">Companies</a>
-      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">Bookmarks</a>
+      <a class="nav-item nav-item-highlight nav-link active" id="nav-company-tab" data-toggle="tab" data-target="#nav-company" role="tab" aria-controls="nav-company" aria-selected="false">Organizations</a>
+      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">My Faves</a>
     </div>
   </nav>
 
@@ -45,19 +45,12 @@
                   <input type="text" class="form-control" ng-model="corporateSearchText">
                 </div>
               </div>
-              <div class="col-12 col-md-4 col-lg-3" ng-repeat="company in corporate.companies | filter: corporateSearchText | orderBy: 'name'" style="margin-bottom: 16px;">
-                <div class="card" ng-if="!company.sponsor">
+              <div class="col-12 col-md-4" ng-repeat="company in corporate.companies | filter: corporateSearchText | orderBy: 'name'" style="margin-bottom: 16px;">
+                <div class="card">
                   <img class="card-img-top img-company" ng-src="{{ company.logo }}">
                   <div class="card-footer text-center">
                     <h4 class="ellipsis">{{ company.name }}</h4>
-                    <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(company._id)">Profile</button>
-                  </div>
-                </div>
-                <div class="card sponsor" ng-if="company.sponsor">
-                  <img class="card-img-top img-company" ng-src="{{ company.logo }}">
-                  <div class="card-footer text-center">
-                    <h4 class="ellipsis">{{ company.name }}</h4>
-                    <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(company._id)">Profile</button>
+                    <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(company._id)">Organization Profile</button>
                   </div>
                 </div>
               </div>
@@ -100,7 +93,7 @@
             </div>
           </div>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Profile</button>
+            <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Organization Profile</button>
             <button type="button" class="btn btn-block btn-outline-danger" ng-click="corporate.removeBookmark(bookmark._id)">Remove</button>
           </div>
           <div class="col-12">
@@ -113,10 +106,10 @@
 </div>
 
 <div class="modal fade" id="moreInfoModal" aria-labelledby="moreInfoModalLabel">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="moreInfoModal">Company Profile</h2>
+        <h2 class="modal-title" id="moreInfoModal">Organization Profile</h2>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -127,88 +120,23 @@
         <div class="row">
           <div class="col-12 col-lg-4">
             <img class="img-fluid img-logo" ng-src="{{ corporate.company.logo }}">
-            <div ng-if="corporate.company.slogan">
-              <h4>Slogan</h4>
-              <p>"{{ corporate.company.slogan }}"</p>
-            </div>
-            <h4>Majors</h4>
-            <p>{{ corporate.company.majorsList }}</p>
-            <h4>Industries</h4>
-            <p>{{ corporate.company.industryList }}</p>
+            <h4>Address</h4>
+            <p>{{ corporate.company.address }} <br>
+              {{ corporate.company.city }}, {{ corporate.company.state }}, {{ corporate.company.zip }}</p>
           </div>
           <div class="col-12 col-lg-8">
-            <div ng-if="corporate.company.overview">
-              <h4>Overview</h4>
-              <p>{{ corporate.company.overview }}</p>
-            </div>
-            <div ng-if="corporate.company.mission">
-              <h4>Mission</h4>
-              <p>{{ corporate.company.mission }}</p>
-            </div>
-            <div ng-if="corporate.company.goals">
-              <h4>Goals</h4>
-              <p>{{ corporate.company.goals }}</p>
-            </div>
-            <div ng-if="corporate.company.model">
-              <h4>Business Model/Operations Highlights</h4>
-              <p>{{ corporate.company.model }}</p>
+            <div ng-if="corporate.company">
+              <h4>Description</h4>
+              <p>{{ corporate.company.description }}</p>
             </div>
             <div class="row" style="margin-bottom: 16px;">
               <div class="col-6">
-                <h4>News Link</h4>
-                <a href="{{ corporate.company.news }}" target="_blank" style="display: inline-block;">Click here</a>
+                <h4>Website</h4>
+                <a href="{{ corporate.company.website }}" target="_blank" style="display: inline-block;">Click here</a>
               </div>
               <div class="col-6">
-                <h4>Apply Link</h4>
-                <a href="{{ corporate.company.apply }}" target="_blank" style="display: inline-block;">Click here</a>
-              </div>
-            </div>
-            <h4>Other Information</h4>
-            <div class="row" style="margin-bottom: 16px;">
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.academia"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.academia"></i>
-                Academia
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.government"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.government"></i>
-                Government Department/Contractor
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.nonprofit"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.nonprofit"></i>
-                Non-profit Organization
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.visa"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.visa"></i>
-                Providing Visa Sponsorship
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.sponsor"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.sponsor"></i>
-                SHPE UF Sponsor
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.ipc"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.ipc"></i>
-                Industry Partnership Council
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.bbqFall"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.bbqFall"></i>
-                Attending Fall BBQ with Industry
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.bbqSpring"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.bbqSpring"></i>
-                Attending Spring BBQ with Industry
-              </div>
-              <div class="col-12">
-                <i class="fas fa-check fa-true" ng-if="corporate.company.national"></i>
-                <i class="fas fa-times fa-false" ng-if="!corporate.company.national"></i>
-                Attending SHPE National Convention
+                <h4>E-mail</h4>
+                <a href="{{ corporate.company.email }}" target="_blank" style="display: inline-block;">Click here</a>
               </div>
             </div>
           </div>

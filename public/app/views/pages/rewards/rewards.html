@@ -1,15 +1,7 @@
 <div class="container custom-container">
   <div class="row">
-    <div class="col-md-8 col-12">
-      <h1>Rewards Program</h1>
-    </div>
-    <div class="col-md-4 col-12">
-      <div class="float-right">
-        <button type="button" class="btn btn-submit" ng-click="main.openRequestModal()">Redeem Points</button>
-        <button type="button" class="btn btn-submit" ng-click="main.openPointsSystemModal()">
-          <i class="fas fa-question"></i>
-        </button>
-      </div>
+    <div class="col-12">
+      <h1>My Wall</h1>
     </div>
   </div>
 
@@ -20,37 +12,12 @@
       <div class="container">
         <h2 class="subtitle">Statistics</h2>
         <div class="card-group">
-          <div class="card bg-danger">
-            <div class="card-header text-center">
-              FALL
-            </div>
-            <div class="card-body text-center">
-              <p class="card-text">POINTS</p>
-              <h1 class="card-text stat-text">{{ main.fallPoints }}</h1>
-            </div>
-            <div class="card-footer text-center">
-              PERCENTILE: {{ main.fallPercentile }}%
-            </div>
-          </div>
-          <div class="card bg-success">
-            <div class="card-header text-center">
-              SPRING
-            </div>
-            <div class="card-body text-center">
-              <p class="card-text">POINTS</p>
-              <h1 class="card-text stat-text">{{ main.springPoints }}</h1>
-            </div>
-            <div class="card-footer text-center">
-              PERCENTILE: {{ main.springPercentile }}%
-            </div>
-          </div>
           <div class="card bg-warning">
             <div class="card-header text-center">
-              SUMMER
+              TOTAL POINTS
             </div>
             <div class="card-body text-center">
-              <p class="card-text">POINTS</p>
-              <h1 class="card-text stat-text">{{ main.summerPoints }}</h1>
+              <h1 class="card-text stat-text">{{ main.points }}</h1>
             </div>
             <div class="card-footer text-center">
               PERCENTILE: {{ main.summerPercentile }}%

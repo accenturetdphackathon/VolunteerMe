@@ -3,27 +3,19 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
 var validate = require('mongoose-validator');
 
-var firstNameValidator = [
-  validate({
-    validator: 'matches',
-    arguments: /^[a-zA-Z ]{3,20}$/i,
-    message: 'First name must be at least 3 character, max 20. No special characters or numbers.'
-  })
-];
-
-var lastNameValidator = [
-  validate({
-    validator: 'matches',
-    arguments: /^[a-zA-Z ]{3,20}$/i,
-    message: 'Last name must be at least 3 character, max 20. No special characters or numbers.'
-  })
-];
-
 var emailValidator = [
   validate({
     validator: 'matches',
     arguments: /^(([\w-\.]{6,30})+@([\w-]+\.)+[\w-]{2,4})?$/i,
-    message: 'Invalid email.'
+    message: 'Invalid email format.'
+  })
+];
+
+var websiteValidator = [
+  validate({
+    validator: 'matches',
+    arguments: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g,
+    message: 'Invalid website format.'
   })
 ];
 
@@ -43,16 +35,12 @@ var passwordValidator = [
   })
 ];
 
-var UserSchema = new Schema({
-  firstName: {
+
+var OrgSchema = new Schema({
+  name: {
     type: String,
     required: true,
-    validate: firstNameValidator
-  },
-  lastName: {
-    type: String,
-    required: true,
-    validate: lastNameValidator
+    unique: true
   },
   email: {
     type: String,
@@ -60,6 +48,46 @@ var UserSchema = new Schema({
     required: true,
     unique: true,
     validate: emailValidator
+  },
+  logo: {
+    type: String,
+    required: true
+  },
+  website: {
+    type: String,
+    required: true,
+    validate: websiteValidator
+  },
+  phone: {
+    type: Number,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
+  address2: {
+    type: String
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  zip: {
+    type: Number,
+    required: true
   },
   username: {
     type: String,
@@ -73,18 +101,9 @@ var UserSchema = new Schema({
     required: true,
     validate: passwordValidator
   },
-  points: {
-    type: Number,
-    default: 0
-  },
   resettoken: {
     type: String,
     required: false
-  },
-  permission: {
-    type: String,
-    require: ["user", "admin"],
-    default: 'user'
   },
   events: [{
     event: {
@@ -94,7 +113,7 @@ var UserSchema = new Schema({
   }]
 });
 
-UserSchema.pre('save', function(next) {
+OrgSchema.pre('save', function(next) {
   var user = this;
 
   if (!user.isModified('password')) return next();
@@ -106,8 +125,8 @@ UserSchema.pre('save', function(next) {
   });
 });
 
-UserSchema.methods.comparePassword = function(password) {
+OrgSchema.methods.comparePassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Org', OrgSchema);

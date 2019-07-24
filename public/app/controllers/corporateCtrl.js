@@ -78,25 +78,6 @@ angular.module('corporateController', ['userServices', 'authServices'])
 
       User.getCompanyInfo(companyId).then(function(data) {
         app.company = data.data.message;
-        app.company.majorsList = "";
-        app.company.industryList = "";
-        app.company.bookmark;
-
-        for (var i = 0; i < app.company.majors.length; i++) {
-          if (i === app.company.majors.length - 1) {
-            app.company.majorsList += app.company.majors[i];
-          } else {
-            app.company.majorsList += (app.company.majors[i] + ", ");
-          }
-        }
-
-        for (var i = 0; i < app.company.industry.length; i++) {
-          if (i === app.company.industry.length - 1) {
-            app.company.industryList += app.company.industry[i];
-          } else {
-            app.company.industryList += (app.company.industry[i] + ", ");
-          }
-        }
 
         if (app.bookmarks.find(bookmark => bookmark._id === app.company._id) != undefined) {
           app.company.bookmark = true;
@@ -167,50 +148,11 @@ angular.module('corporateController', ['userServices', 'authServices'])
 
         for (var i = 0; i < data.data.message.length; i++) {
           var company = data.data.message[i];
-          company.options = "";
-
-          if (company.academia) {
-            company.options += "academia, ";
-          }
-
-          if (company.government) {
-            company.options += "government, ";
-          }
-
-          if (company.nonprofit) {
-            company.options += "nonprofit, non-profit, ";
-          }
-
-          if (company.visa) {
-            company.options += "visa, visa sponsorship, provides visa sponsorship, ";
-          }
-
-          if (company.sponsor) {
-            company.options += "shpe uf sponsor, sponsor, shpe sponsor, ";
-          }
-
-          if (company.ipc) {
-            company.options += "ipc, industry partnership council, ";
-          }
-
-          if (company.bbqFall) {
-            company.options += "fall, bbq, bbq fall, fall bbq, bbq with industry, fall bbq with industry, ";
-          }
-
-          if (company.bbqSpring) {
-            company.options += "spring, bbq, bbq spring, spring bbq, bbq with industry ,spring bbq with industry, ";
-          }
-
-          if (company.national) {
-            company.options += "national, national convention, shpe national convention, "
-          }
-
           app.companies.push(company);
         }
       }
 
       if (data.data.message.length == 0) {
-        console.log("LINE 211");
         app.empty = true;
       }
     });

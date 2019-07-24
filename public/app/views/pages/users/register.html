@@ -2,10 +2,11 @@
   <div class="container">
     <div class="row">
       <div class="offset-1 col-10 offset-md-2 col-md-8 register-container">
-        <h1>Register</h1>
+        <div>
+          <h1>Register</h1>
+        </div>
 
         <hr>
-
         <div class="success-message" ng-show="register.successMsg">
           <div class="alert alert-success">{{ register.successMsg }}</div>
         </div>
@@ -14,40 +15,41 @@
           <div class="alert alert-danger">{{ register.errorMsg }}</div>
         </div>
 
-        <form name="regForm" ng-submit="register.regUser(regData);" novalidate>
+        <form name="regForm" ng-submit="register.regVolunteer(regData);" novalidate>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="userFirst">First Name <span ng-show="(!regForm.firstName.$pristine && regForm.firstName.$error.required) || (regForm.$submitted && regForm.firstName.$error.required)"> (This field is required)</span></label>
-              <input type="text" class="form-control" name="firstName" id="userFirst" ng-model="register.regData.firstName" required>
+              <label for="volunteerFirst">First Name <span ng-show="(!regForm.firstName.$pristine && regForm.firstName.$error.required) || (regForm.$submitted && regForm.firstName.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="firstName" id="volunteerFirst" ng-model="register.regData.firstName" required>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="userLast">Last Name <span ng-show="(!regForm.lastName.$pristine && regForm.lastName.$error.required) || (regForm.$submitted && regForm.lastName.$error.required)"> (This field is required)</span></label>
-              <input type="text" class="form-control" name="lastName" id="userLast" ng-model="register.regData.lastName" required>
+              <label for="volunteerLast">Last Name <span ng-show="(!regForm.lastName.$pristine && regForm.lastName.$error.required) || (regForm.$submitted && regForm.lastName.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="lastName" id="volunteerLast" ng-model="register.regData.lastName" required>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="userEmail">Email <span ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)"> (This field is required)</span></label>
-              <input type="email" class="form-control" name="email" id="userEmail" ng-model="register.regData.email" required>
+              <label for="volunteerEmail">Email <span ng-show="(!regForm.email.$pristine && regForm.email.$error.required) || (regForm.$submitted && regForm.email.$error.required)"> (This field is required)</span></label>
+              <input type="email" class="form-control" name="email" id="volunteerEmail" ng-model="register.regData.email" required>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="userUsername">Username <span ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)"> (This field is required)</span></label>
-              <input type="text" class="form-control" name="username" id="userUsername" ng-model="register.regData.username" required>
+              <label for="volunteerUsername">Username <span ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)"> (This field is required)</span></label>
+              <input type="text" class="form-control" name="username" id="volunteerUsername" ng-model="register.regData.username" required>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="userPassword">Password <span ng-show="(!regForm.firstPassword.$pristine && regForm.firstPassword.$error.required) || (regForm.$submitted && regForm.firstPassword.$error.required)"> (This field is required)</span></label>
-              <input type="password" class="form-control" name="firstPassword" id="userPassword" ng-model="firstPassword" required>
+              <label for="volunteerPassword">Password <span ng-show="(!regForm.firstPassword.$pristine && regForm.firstPassword.$error.required) || (regForm.$submitted && regForm.firstPassword.$error.required)"> (This field is
+                  required)</span></label>
+              <input type="password" class="form-control" name="firstPassword" id="volunteerPassword" ng-model="firstPassword" required>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="userConfirmPassword">Confirm Password <span ng-show="!confirmed && !regForm.confirmPassword.$pristine && regForm.firstPassword.$valid"> (Passwords don't match)</span></label>
-              <input type="password" class="form-control" name="confirmPassword" id="userConfirmPassword" ng-model="confirm" match="{{[ firstPassword ]}}" ng-change="register.regData.password = confirm" required>
+              <label for="volunteerConfirmPassword">Confirm Password <span ng-show="!confirmed && !regForm.confirmPassword.$pristine && regForm.firstPassword.$valid"> (Passwords don't match)</span></label>
+              <input type="password" class="form-control" name="confirmPassword" id="volunteerConfirmPassword" ng-model="confirm" match="{{[ firstPassword ]}}" ng-change="register.regData.password = confirm" required>
             </div>
 
             <div class="container">
@@ -58,12 +60,12 @@
           <hr>
 
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-12">
               <button type="submit" class="btn btn-submit">Submit</button>
             </div>
           </div>
-
         </form>
+
       </div>
     </div>
   </div>
