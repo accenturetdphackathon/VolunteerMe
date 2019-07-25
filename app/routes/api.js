@@ -567,10 +567,24 @@ module.exports = function(router) {
       if (err) throw err;
 
       if (!user) {
-        res.json({
-          success: false,
-          message: 'User not found'
-        });
+        Org.findOne({
+          username: req.decoded.username
+        }, function(err, org) {
+          if (err) throw err;
+
+          if (!org) {
+            res.json({
+              success: false,
+              message: 'User not found'
+            });
+          } else {
+            console.log(org.permission);
+            res.json({
+              success: true,
+              message: org.permission
+            })
+          }
+        })
       } else {
         res.json({
           success: true,

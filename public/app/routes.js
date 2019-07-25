@@ -120,8 +120,8 @@ app.run(['$rootScope', 'Auth', '$location', 'User', function($rootScope, Auth, $
         if (!Auth.isLoggedIn()) {
           event.preventDefault();
           $location.path('/');
+          console.log(next.$$route.permission);
         } else if (next.$$route.permission) {
-
           User.getPermission().then(function(data) {
             if (next.$$route.permission[0] !== data.data.message) {
               event.preventDefault();

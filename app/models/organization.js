@@ -110,7 +110,12 @@ var OrgSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Code'
     }
-  }]
+  }],
+  permission: {
+    type: String,
+    require: ["user", "admin"],
+    default: 'admin'
+  }
 });
 
 OrgSchema.pre('save', function(next) {
