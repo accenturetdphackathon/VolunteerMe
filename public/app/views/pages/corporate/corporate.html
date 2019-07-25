@@ -8,7 +8,7 @@
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-item-highlight nav-link active" id="nav-company-tab" data-toggle="tab" data-target="#nav-company" role="tab" aria-controls="nav-company" aria-selected="false">Organizations</a>
-      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">My Causes</a>
+      <a class="nav-item nav-item-highlight nav-link" id="nav-bookmark-tab" data-toggle="tab" data-target="#nav-bookmark" role="tab" aria-controls="nav-bookmark" aria-selected="true">Following</a>
     </div>
   </nav>
 
@@ -94,7 +94,7 @@
           </div>
           <div class="col-sm-2">
             <button type="button" class="btn btn-block btn-submit" ng-click="corporate.openMoreInfoModal(bookmark._id)">Profile</button>
-            <button type="button" class="btn btn-block btn-outline-danger" ng-click="corporate.removeBookmark(bookmark._id)">Remove</button>
+            <button type="button" class="btn btn-block btn-outline-danger" ng-click="corporate.removeBookmark(bookmark._id)">Unfollow</button>
           </div>
           <div class="col-12">
             <hr>
@@ -144,8 +144,8 @@
         <div class="row">
           <div class="col-12">
             <button type="button" class="btn btn-light" ng-click="corporate.closeMoreInfoModal()">Close</button>
-            <button type="button" class="btn btn-success float-right" ng-if="!corporate.company.bookmark" ng-click="corporate.addBookmark(corporate.company._id)">Add to My Causes</button>
-            <button type="button" class="btn btn-danger float-right" ng-if="corporate.company.bookmark" ng-click="corporate.removeBookmark(corporate.company._id)">Remove from My Causes</button>
+            <button type="button" class="btn btn-success float-right" ng-if="!corporate.company.bookmark" ng-click="corporate.addBookmark(corporate.company._id)">Follow</button>
+            <button type="button" class="btn btn-danger float-right" ng-if="corporate.company.bookmark" ng-click="corporate.removeBookmark(corporate.company._id)">Unfollow</button>
           </div>
         </div>
       </div>

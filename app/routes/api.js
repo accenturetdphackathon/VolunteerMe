@@ -2,7 +2,7 @@ require('dotenv').config();
 
 // MODEL FILES
 var User = require('../models/user');
-var Code = require('../models/code');
+var Event = require('../models/code');
 var Request = require('../models/request');
 var Alumni = require('../models/alumni');
 var Company = require('../models/company');
@@ -13,6 +13,8 @@ var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var nodeGeocoder = require('node-geocoder');
 var Json2csvParser = require('json2csv').Parser;
+
+var user = "";
 
 // MISCELLANEOUS
 var fs = require('fs');
@@ -140,96 +142,30 @@ module.exports = function(router) {
 
   // ENDPOINT TO CREATE EVENT CODES
   router.post('/codes', function(req, res) {
-    if (req.body.name == null || req.body.code == null || req.body.type == null || req.body.expiration == null || req.body.name == '' || req.body.code == '' || req.body.type == '' || req.body.expiration == '') {
-      res.json({
-        success: false,
-        message: 'Make sure you filled out the entire form!'
-      });
-    } else {
-      var code = new Code();
-      code.name = req.body.name;
-      code.code = req.body.code.toLowerCase();
-      code.type = req.body.type;
 
-      if (code.type == 'General Body Meeting' || code.type == 'Cabinet Meeting' || code.type == 'Workshop' || code.type == 'Social' || code.type == 'Form/Survey') {
-        code.points = 1;
-      } else if (code.type == 'Corporate Event') {
-        code.points = 2;
-      } else if (code.type == 'Fundraiser') {
-        code.points = 3;
-      } else if (code.type == 'Volunteering') {
-        code.points = 4;
-      } else if (code.type == 'Miscellaneous') {
-        code.points = 5;
-      } else {
-        code.points = 0;
-      }
+    console.log("REQUEST:");
+    console.log(user);
+      var event = new Event();
+      event.name = req.body.name;
+      event.description = req.body.description;
+      event.date = req.body.date;
+      event.start = req.body.start;
+      event.end = req.body.end;
+      event.orgId = user;
 
-      code.expiration = Date.now() + (req.body.expiration * 60 * 60 * 1000);
+      console.log(event);
 
-      if (code.expiration.getMonth() >= 0 && code.expiration.getMonth() <= 3) {
-        code.semester = "Spring";
-      } else if (code.expiration.getMonth() >= 4 && code.expiration.getMonth() <= 6) {
-        code.semester = "Summer";
-      } else {
-        code.semester = "Fall";
-      }
-
-      code.save(function(err) {
+      event.save(function(err) {
         if (err) {
-          if (err.errors != null) {
-            if (err.errors.name) {
-              res.json({
-                success: false,
-                message: err.errors.name.properties.message
-              });
-            } else if (err.errors.code) {
-              res.json({
-                success: false,
-                message: err.errors.code.properties.message
-              });
-            } else if (err.errors.type) {
-              res.json({
-                success: false,
-                message: err.errors.type.properties.message
-              });
-            } else if (err.errors.points) {
-              res.json({
-                success: false,
-                message: err.errors.points.properties.message
-              });
-            } else if (err.errors.expiration) {
-              res.json({
-                success: false,
-                message: err.errors.expiration.properties.message
-              });
-            } else {
-              res.json({
-                success: false,
-                message: err
-              });
-            }
-          } else if (err) {
-            if (err.code == 11000) {
-              res.json({
-                success: false,
-                message: 'Event name and/or code already taken.'
-              });
-            } else {
-              res.json({
-                success: false,
-                message: err
-              });
-            }
-          }
+          throw err;
         } else {
           res.json({
             success: true,
-            message: code
+            message: event
           });
         }
       });
-    }
+    // }
   });
 
   // ENDPOINT TO SIGN IN AND AUTHENTICATE USER
@@ -263,7 +199,8 @@ module.exports = function(router) {
 
               var token = jwt.sign({
                 username: org.username,
-                email: org.email
+                email: org.email,
+                id: org._id
               }, secret, {
                 expiresIn: '1h'
               });
@@ -294,7 +231,8 @@ module.exports = function(router) {
 
             var token = jwt.sign({
               username: user.username,
-              email: user.email
+              email: user.email,
+              id: user._id
             }, secret, {
               expiresIn: '1h'
             });
@@ -375,6 +313,7 @@ module.exports = function(router) {
         user.resettoken = jwt.sign({
           username: user.username,
           email: user.email,
+          id: org._id
         }, secret, {
           expiresIn: '24h'
         });
@@ -540,6 +479,23 @@ module.exports = function(router) {
       username: req.params.username
     }).select().exec(function(err, user) {
       if (!user) {
+
+        Org.findOne({
+          username: req.decoded.username
+        }).select().exec(function(err, user) {
+          var newToken = jwt.sign({
+            username: user.username,
+            email: user.email,
+            id: user._id
+          }, secret, {
+            expiresIn: '1h'
+          });
+          res.json({
+            success: true,
+            token: newToken
+          });
+        });
+
         res.json({
           success: false,
           message: 'No user was found'
@@ -547,7 +503,8 @@ module.exports = function(router) {
       } else {
         var newToken = jwt.sign({
           username: user.username,
-          email: user.email
+          email: user.email,
+          id: user._id
         }, secret, {
           expiresIn: '1h'
         });
@@ -596,11 +553,15 @@ module.exports = function(router) {
 
   // ENDPOINT TO RETRIEVE ALL USERS
   router.get('/admin', function(req, res) {
-    User.find({
+    user = req.decoded.username;
 
+    User.find({
+      bookmarks: {
+        _id: req.decoded.id
+      }
     }, function(err, users) {
       if (err) throw err;
-      User.findOne({
+      Org.findOne({
         username: req.decoded.username
       }, function(err, mainUser) {
         if (err) throw err;
@@ -637,11 +598,11 @@ module.exports = function(router) {
 
   // ENDPOINT TO RETRIEVE EVENT CODES
   router.get('/getcodes', function(req, res) {
-    Code.find({
-
+    Event.find({
+      orgId: user
     }, function(err, events) {
       if (err) throw err;
-      User.findOne({
+      Org.findOne({
         username: req.decoded.username
       }, function(err, mainUser) {
         if (err) throw err;
@@ -685,7 +646,7 @@ module.exports = function(router) {
         message: 'No code was provided'
       });
     } else {
-      Code.findOne({
+      Event.findOne({
         code: req.body.code.toLowerCase()
       }).select().exec(function(err, code) {
 
@@ -866,7 +827,7 @@ module.exports = function(router) {
 
   // ENDPOINT TO GRAB EVENT CODE INFORMATION FOR INDIVIDUAL USERS
   router.get('/getcodeinfo/:code', function(req, res) {
-    Code.findOne({
+    Event.findOne({
       _id: req.params.code
     }).populate().exec(function(err, event) {
       if (err) throw err;
@@ -1091,7 +1052,7 @@ module.exports = function(router) {
               message: 'Event code already redeemed by the user.'
             });
           } else {
-            Code.findOne({
+            Event.findOne({
               _id: req.body.eventId
             }).select().exec(function(err, code) {
               if (code.semester == "Fall") {

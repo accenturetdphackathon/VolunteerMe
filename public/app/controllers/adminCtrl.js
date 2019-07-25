@@ -394,6 +394,7 @@ angular.module('adminController', ['userServices'])
 
     User.getUsers().then(function(data) {
       if (data.data.success) {
+        console.log(data.data);
         if (data.data.permission === 'admin') {
           app.users = data.data.message;
           app.accessDenied = false;
