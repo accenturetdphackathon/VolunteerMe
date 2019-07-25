@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(__dirname + '/public'));
 app.use('/api', appRoutes);
 
-mongoose.connect(process.env.URI, {
+mongoose.connect("mongodb+srv://master:Accenture1@cluster0-yorc7.mongodb.net/test?retryWrites=true&w=majority", {
     useNewUrlParser: true
   },
   function(err) {

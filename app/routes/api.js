@@ -18,7 +18,7 @@ var user = "";
 
 // MISCELLANEOUS
 var fs = require('fs');
-var secret = process.env.SECRET;
+var secret = "tacobell";
 
 module.exports = function(router) {
 
