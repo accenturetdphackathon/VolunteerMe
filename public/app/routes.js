@@ -25,24 +25,28 @@ var app = angular.module('appRoutes', ['ngRoute'])
 
       .when('/profile', {
         templateUrl: 'app/views/pages/users/profile.html',
-        authenticated: true
+        authenticated: true,
+        permission: ['user']
       })
 
       .when('/rewards', {
         templateUrl: 'app/views/pages/rewards/rewards.html',
-        authenticated: true
+        authenticated: true,
+        permission: ['user']
       })
 
       .when('/alumni', {
         templateUrl: 'app/views/pages/alumni/alumni.html',
         controller: 'alumniCtrl',
         controllerAs: 'alumni',
-        authenticated: true
+        authenticated: true,
+        permission: ['user']
       })
 
       .when('/resume', {
         templateUrl: 'app/views/pages/resume/resume.html',
-        authenticated: true
+        authenticated: true,
+        permission: ['user']
       })
 
       .when('/admin', {
@@ -65,7 +69,8 @@ var app = angular.module('appRoutes', ['ngRoute'])
         templateUrl: 'app/views/pages/corporate/corporate.html',
         controller: 'corporateCtrl',
         controllerAs: 'corporate',
-        authenticated: true
+        authenticated: true,
+        permission: ['user']
       })
 
       .when('/forgotusername', {
