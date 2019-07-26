@@ -1,7 +1,7 @@
 <div class="container custom-container">
   <div class="row">
     <div class="col-md-8 col-12">
-      <h1>My Wall</h1>
+      <h1>Opportunities</h1>
     </div>
   </div>
   <hr>
@@ -11,13 +11,15 @@
       <div class="card" style="margin-bottom: 16px;">
         <div class="row no-gutters">
           <div class="col-md-3">
-            <img src="https://blog.hootsuite.com/wp-content/uploads/2017/06/social-media-content-calendar-940x470.jpg" class="card-img" alt="...">
+            <img src="../../../assets/images/sample.png" class="card-img" alt="...">
           </div>
           <div class="col-md-9">
             <div class="card-body">
-              <h3 class="card-title">{{ event.name }}</h3>
-              <p class="card-text"><small class="text-muted">{{ event.org }}</small></p>
-              <p class="card-text">{{ event.description }}</p>
+              <h2 class="card-title">{{ event.name }}</h2>
+              <!-- <p class="card-text"><small class="text-muted">{{ event.orgId }}</small></p> -->
+              <p class="card-text" style="margin-bottom: 16px">{{ event.description }}</p>
+              <h3>When?</h3>
+              <p>{{ event.date | date:'MMMM d, yyyy' }}, {{ event.start | date:'hh:mm a' }} - {{ event.end | date:'hh:mm a' }}</p>
             </div>
           </div>
         </div>

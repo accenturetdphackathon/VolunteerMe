@@ -83,8 +83,6 @@ angular.module('corporateController', ['userServices', 'authServices'])
         } else {
           app.company.bookmark = false;
         }
-
-        console.log(app.company);
       });
     };
 
