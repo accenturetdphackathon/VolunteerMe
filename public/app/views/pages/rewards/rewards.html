@@ -17,7 +17,7 @@
               POINTS EARNED
             </div>
             <div class="card-body text-center">
-              <h1 class="card-text stat-text">{{ main.points }}</h1>
+              <h1 class="card-text stat-text" style="color: white">{{ main.points }}</h1>
             </div>
           </div>
           <div class="card bg-primary">
@@ -25,7 +25,7 @@
               POINTS DONATED
             </div>
             <div class="card-body text-center">
-              <h1 class="card-text stat-text">{{ main.donated }}</h1>
+              <h1 class="card-text stat-text" style="color: white">{{ main.donated }}</h1>
             </div>
           </div>
           <div class="card bg-success">
@@ -33,7 +33,7 @@
               POINTS REMAINING
             </div>
             <div class="card-body text-center">
-              <h1 class="card-text stat-text">{{ main.remaining }}</h1>
+              <h1 class="card-text stat-text" style="color: white">{{ main.remaining }}</h1>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
                 </tr>
                 <tr ng-repeat="event in main.codeArray | orderBy: 'name'">
                   <td>{{ event.name }}</td>
-                  <td>{{ event.date }}</td>
+                  <td>{{ event.date | date:'MMMM d, yyyy' }}</td>
                   <td class="text-center">10</td>
                 </tr>
                 <tr class="table-head">
@@ -79,11 +79,11 @@
                 </div>
               </div>
             </div>
-            <div class="jumbotron" ng-if="main.codeArray.length == 0">
-              <p class="text-center">THERE IS NO POINTS RECORD.</p>
+            <div class="jumbotron" ng-if="main.donations.length == 0">
+              <p class="text-center">THERE IS NO DONATION ON RECORD.</p>
             </div>
             <div class="table-responsive">
-              <table class="table table-striped" ng-if="main.codeArray.length != 0">
+              <table class="table table-striped" ng-if="main.donations.length != 0">
                 <tr class="table-head">
                   <th>ORGANIZATION</th>
                   <th></th>

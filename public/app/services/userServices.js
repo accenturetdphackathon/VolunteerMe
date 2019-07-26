@@ -205,6 +205,10 @@ angular.module('userServices', [])
       return $http.post('api/createorg/', orgData);
     }
 
+    userFactory.getEvents = function(orgName) {
+      return $http.get('api/getevents/' + orgName);
+    }
+
     return userFactory;
 
 

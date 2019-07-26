@@ -81,8 +81,6 @@ angular.module('mainController', ['authServices', 'userServices'])
 
             var timeCheck = expireTime.exp - timeStamp;
 
-            // console.log("SECONDS LEFT: " + timeCheck);
-
             if (timeCheck <= 600 && timeCheck > 0) {
               console.log("TOKEN EXPIRATION: " + timeCheck);
               showModal(1);
@@ -178,6 +176,8 @@ angular.module('mainController', ['authServices', 'userServices'])
           app.donations = data.data.donations;
           app.donated = data.data.donated;
           app.remaining = app.points - app.donated;
+          app.wallEvents = [];
+          app.codeArray = [];
 
           app.newUserInfo.username = data.data.username;
 
@@ -192,6 +192,19 @@ angular.module('mainController', ['authServices', 'userServices'])
             }
           });
 
+
+          if (app.bookmarks) {
+            for (var i = 0; i < app.bookmarks.length; i++) {
+              User.getEvents(app.bookmarks[i]).then(function(data) {
+                for (var i = 0; i < data.data.message.length; i++) {
+                  app.wallEvents.push(data.data.message[i]);
+                }
+              });
+            }
+          }
+
+          console.log(app.wallEvents);
+
           User.getPercentile(app.username).then(function(data) {
             if (data.data.success) {
               app.fallPercentile = data.data.message.fall;
@@ -200,7 +213,6 @@ angular.module('mainController', ['authServices', 'userServices'])
             }
           });
 
-          app.codeArray = [];
 
           if (app.events) {
             for (var i = 0; i < app.events.length; i++) {

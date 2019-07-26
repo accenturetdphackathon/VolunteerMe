@@ -853,12 +853,15 @@ module.exports = function(router) {
 
   // ENDPOINT TO GRAB EVENT ATTENDANCE
   router.get('/getattendance/:eventid', function(req, res) {
+    console.log(req.params.eventid);
     User.find({
       events: {
         _id: req.params.eventid
       }
     }).populate().exec(function(err, users) {
       if (err) throw err;
+
+      console.log(users);
 
       res.json({
         success: true,
@@ -1157,6 +1160,17 @@ module.exports = function(router) {
           });
         });
       }
+    });
+  });
+
+  router.get('/getevents/:orgName', function(req, res) {
+    Event.find({
+      orgId: req.params.orgName
+    }, function (err, events) {
+      res.json({
+        success: true,
+        message: events
+      })
     });
   });
 
