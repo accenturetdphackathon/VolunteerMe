@@ -115,6 +115,10 @@ var OrgSchema = new Schema({
     type: String,
     require: ["user", "admin"],
     default: 'admin'
+  },
+  points: {
+    type: Number,
+    default: 0
   }
 });
 

@@ -87,7 +87,7 @@ angular.module('mainController', ['authServices', 'userServices'])
               console.log("TOKEN EXPIRATION: " + timeCheck);
               showModal(1);
               $interval.cancel(interval);
-            } else if (timeCheck <= 0){
+            } else if (timeCheck <= 0) {
               app.isLoggedIn = false;
               Auth.logout();
             }
@@ -172,17 +172,12 @@ angular.module('mainController', ['authServices', 'userServices'])
           app.lastName = data.data.lastName;
           app.username = data.data.username;
           app.email = data.data.email;
-          app.major = data.data.major;
-          app.year = data.data.year;
-          app.nationality = data.data.nationality;
-          app.ethnicity = data.data.ethnicity;
-          app.sex = data.data.sex;
           app.points = data.data.points;
-          app.fallPoints = data.data.fallPoints
-          app.springPoints = data.data.springPoints;
-          app.summerPoints = data.data.summerPoints;
           app.events = data.data.events;
           app.bookmarks = data.data.bookmarks;
+          app.donations = data.data.donations;
+          app.donated = data.data.donated;
+          app.remaining = app.points - app.donated;
 
           app.newUserInfo.username = data.data.username;
 
@@ -288,4 +283,10 @@ angular.module('mainController', ['authServices', 'userServices'])
       app.newUserInfo.major = "";
       app.newUserInfo.year = "";
     };
+
+    User.getCompanies().then(function(data) {
+      if (data.data.success) {
+        app.orgs = (data.data.message);
+      }
+    });
   });

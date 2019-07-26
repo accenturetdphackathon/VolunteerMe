@@ -637,190 +637,39 @@ module.exports = function(router) {
 
   // ENDPOINT TO ADD A REQUEST (*)
   router.put('/addrequest', function(req, res) {
+    Org.findOneAndUpdate({
+      name: req.body.org
+    }, {
+      $inc: {
+        points: req.body.points
+      }
+    },function (err, org) {
 
-    if (req.body.code == null || req.body.code == '') {
-      res.json({
-        success: false,
-        message: 'No code was provided'
-      });
-    } else {
-      Event.findOne({
-        code: req.body.code.toLowerCase()
-      }).select().exec(function(err, code) {
-
-        if (err) throw err;
-
-        if (code == null || code == '') {
-          res.json({
-            success: false,
-            message: 'Event not found'
-          });
-        } else if (code.expiration < Date.now()) {
-          res.json({
-            success: false,
-            message: 'Event code expired'
-          });
-        } else {
-          User.findOne({
-            username: req.decoded.username
-          }, function(err, user) {
-            if (err) throw err;
-
-            var isDuplicate = false;
-
-            for (var i = 0; i < user.events.length; i++) {
-              if (user.events[i]._id.equals(code._id)) {
-                isDuplicate = true;
-                break;
-              }
+      if (org) {
+        console.log(req.decoded);
+        User.findOneAndUpdate({
+          username: req.decoded.username
+        }, {
+          $push: {
+            donations: {
+              "org": req.body.org,
+              "points": req.body.points
             }
+          },
+          $inc: {
+            donated: req.body.points
+          }
+        }, function(err, user) {
 
-            if (isDuplicate) {
-              res.json({
-                success: false,
-                message: 'Event code already redeemed'
-              });
-            } else {
-              if (!user) {
-                res.json({
-                  success: false,
-                  message: 'Unable to add code to profile'
-                });
-              } else {
-                if (code.points == 1 && code.type == 'General Body Meeting') {
-                  if (code.semester == "Fall") {
-                    User.findOneAndUpdate({
-                      username: req.decoded.username,
-                    }, {
-                      $push: {
-                        events: {
-                          _id: code
-                        }
-                      },
-                      $inc: {
-                        points: code.points,
-                        fallPoints: code.points
-                      }
-                    }, function(err, user) {
-                      if (err) throw (err);
+          console.log(user);
 
-                      if (!user) {
-                        res.json({
-                          success: false,
-                          message: 'Unable to add code to profile'
-                        });
-                      } else {
-                        res.json({
-                          success: true,
-                          message: "Points redeemed!"
-                        });
-                      }
-                    });
-                  } else if (code.semester == "Spring") {
-                    User.findOneAndUpdate({
-                      username: req.decoded.username,
-                    }, {
-                      $push: {
-                        events: {
-                          _id: code
-                        }
-                      },
-                      $inc: {
-                        points: code.points,
-                        springPoints: code.points
-                      }
-                    }, function(err, user) {
-                      if (err) throw (err);
-
-                      if (!user) {
-                        res.json({
-                          success: false,
-                          message: 'Unable to add code to profile'
-                        });
-                      } else {
-                        res.json({
-                          success: true,
-                          message: "Points redeemed!"
-                        });
-                      }
-                    });
-                  } else if (code.semester == "Summer") {
-                    User.findOneAndUpdate({
-                      username: req.decoded.username,
-                    }, {
-                      $push: {
-                        events: {
-                          _id: code
-                        }
-                      },
-                      $inc: {
-                        points: code.points,
-                        summer: code.points
-                      }
-                    }, function(err, user) {
-                      if (err) throw (err);
-
-                      if (!user) {
-                        res.json({
-                          success: false,
-                          message: 'Unable to add code to profile'
-                        });
-                      } else {
-                        res.json({
-                          success: true,
-                          message: "Points redeemed!"
-                        });
-                      }
-                    });
-                  }
-                } else {
-
-                  var newRequest = new Request();
-                  newRequest.userId = user._id;
-                  newRequest.eventId = code._id;
-                  newRequest.firstName = user.firstName;
-                  newRequest.lastName = user.lastName;
-                  newRequest.username = user.username;
-                  newRequest.eventName = code.name;
-                  newRequest.type = code.type;
-                  newRequest.points = code.points;
-                  newRequest.status = 0;
-                  newRequest.semester = code.semester;
-
-                  Request.findOne({
-                    userId: user._id,
-                    eventId: code._id
-                  }).select().exec(function(err, request) {
-                    if (err) throw err;
-
-                    if (request) {
-                      res.json({
-                        success: false,
-                        message: 'Request has already been submitted.'
-                      });
-                    } else {
-                      newRequest.save(function(err) {
-                        if (err) {
-                          res.json({
-                            success: false,
-                            message: err
-                          });
-                        } else {
-                          res.json({
-                            success: true,
-                            message: 'Your request has been sent for approval.'
-                          });
-                        }
-                      });
-                    }
-                  });
-                }
-              }
-            }
-          });
-        }
-      });
-    }
+          res.json({
+            success: true,
+            message: "Success! Thank you for your donation!"
+          })
+        })
+      }
+    })
   });
 
   // ENDPOINT TO GRAB EVENT CODE INFORMATION FOR INDIVIDUAL USERS

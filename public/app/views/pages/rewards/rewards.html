@@ -20,6 +20,22 @@
               <h1 class="card-text stat-text">{{ main.points }}</h1>
             </div>
           </div>
+          <div class="card bg-primary">
+            <div class="card-header text-center">
+              TOTAL POINTS DONATED
+            </div>
+            <div class="card-body text-center">
+              <h1 class="card-text stat-text">{{ main.donated }}</h1>
+            </div>
+          </div>
+          <div class="card bg-success">
+            <div class="card-header text-center">
+              TOTAL POINTS REMAINING
+            </div>
+            <div class="card-body text-center">
+              <h1 class="card-text stat-text">{{ main.remaining }}</h1>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -53,26 +69,35 @@
             </div>
           </div>
           <div class="col-sm-12 col-md-6">
-            <h2 class="subtitle">Donation History</h2>
+            <div class="row">
+              <div class="col-8">
+                <h2 class="subtitle">Donation History</h2>
+              </div>
+              <div class="col-4">
+                <div class="float-right">
+                  <button type="button" class="btn btn-submit" ng-click="main.openRequestModal()">Donate Points</button>
+                </div>
+              </div>
+            </div>
             <div class="jumbotron" ng-if="main.codeArray.length == 0">
               <p class="text-center">THERE IS NO POINTS RECORD.</p>
             </div>
             <div class="table-responsive">
               <table class="table table-striped" ng-if="main.codeArray.length != 0">
                 <tr class="table-head">
-                  <th>EVENT</th>
-                  <th>DATE</th>
+                  <th>ORGANIZATION</th>
+                  <th></th>
                   <th class="text-center">POINTS</th>
                 </tr>
-                <tr ng-repeat="event in main.codeArray | orderBy: 'name'">
-                  <td>{{ event.name }}</td>
-                  <td>{{ event.date }}</td>
-                  <td class="text-center">10</td>
+                <tr ng-repeat="donation in main.donations">
+                  <td>{{ donation.org }}</td>
+                  <td></td>
+                  <td class="text-center">{{ donation.points }}</td>
                 </tr>
                 <tr class="table-head">
-                  <th>TOTAL POINTS EARNED</th>
+                  <th>TOTAL POINTS DONATED</th>
                   <th></th>
-                  <th class="text-center">{{ main.points }}</th>
+                  <th class="text-center">{{ main.donated }}</th>
                 </tr>
               </table>
             </div>
@@ -88,7 +113,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title" id="createRequestLabel">Redeem Points</h2>
+        <h2 class="modal-title" id="createRequestLabel">Donate Points</h2>
       </div>
       <div class="modal-body">
         <div class="success-message" ng-show="main.successMsg">
@@ -100,10 +125,17 @@
         </div>
 
         <form name="createRequestForm" ng-submit="main.createRequest(requestData);" novalidate>
-          <div class="form-group">
-            <label for="requestCode">Event Code <span ng-show="(!createRequestForm.code.$pristine && createRequestForm.code.$error.required) || (createRequestForm.$submitted && createRequestForm.code.$error.required)"> (This field is required)</span></label>
-            <input type="text" class="form-control" name="code" id="requestCode" ng-model="main.requestData.code" required>
 
+          <div class="form-group">
+            <label for="userYear">Organization</label>
+            <select class="form-control" name="org" id="requestOrg" ng-model="main.requestData.org">
+              <option ng-repeat="org in main.orgs">{{ org.name }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="requestCode">Points Donation</label>
+            <input type="text" class="form-control" name="points" id="requestCode" ng-model="main.requestData.points" required>
           </div>
 
           <div class="row">

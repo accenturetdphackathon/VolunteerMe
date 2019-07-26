@@ -94,7 +94,15 @@ var UserSchema = new Schema({
   }],
   bookmarks: [{
     type: String
-  }]
+  }],
+  donations: [{
+    org: String,
+    points: Number
+  }],
+  donated: {
+    type: Number,
+    default: 0
+  }
 });
 
 UserSchema.pre('save', function(next) {
