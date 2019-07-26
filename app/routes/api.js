@@ -13,6 +13,7 @@ var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var nodeGeocoder = require('node-geocoder');
 var Json2csvParser = require('json2csv').Parser;
+var moment = require('moment');
 
 var user = "";
 
@@ -142,15 +143,18 @@ module.exports = function(router) {
 
   // ENDPOINT TO CREATE EVENT CODES
   router.post('/codes', function(req, res) {
+    moment().format();
 
-    console.log("REQUEST:");
-    console.log(user);
+    console.log(moment(req.body.date, "MM-DD-YY"));
+    console.log(moment(req.body.date + " " + req.body.start, "MM-DD-YY h:mm a"));
+    console.log(moment(req.body.date + " " + req.body.end, "MM-DD-YY h:mm a"));
+
     var event = new Event();
     event.name = req.body.name;
     event.description = req.body.description;
-    event.date = req.body.date;
-    event.start = req.body.start;
-    event.end = req.body.end;
+    event.date = moment(req.body.date, "MM-DD-YY");
+    event.start = moment(req.body.date + " " + req.body.start, "MM-DD-YY h:mm a");
+    event.end = moment(req.body.date + " " + req.body.end, "MM-DD-YY h:mm a");
     event.orgId = user;
 
     console.log(event);
@@ -165,7 +169,6 @@ module.exports = function(router) {
         });
       }
     });
-    // }
   });
 
   // ENDPOINT TO SIGN IN AND AUTHENTICATE USER

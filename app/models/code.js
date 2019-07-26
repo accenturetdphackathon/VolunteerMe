@@ -22,15 +22,15 @@ var EventSchema = new Schema({
     required: true
   },
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   start: {
-    type: String,
+    type: Date,
     required: true
   },
   end: {
-    type: String,
+    type: Date,
     required: true
   },
   orgId: {
