@@ -75,15 +75,16 @@ angular.module('corporateController', ['userServices', 'authServices'])
       $("#moreInfoModal").modal({
         backdrop: 'static'
       });
-
       User.getCompanyInfo(companyId).then(function(data) {
         app.company = data.data.message;
 
-        if (app.bookmarks.find(bookmark => bookmark._id === app.company._id) != undefined) {
+        if (app.bookmarks.find(bookmark => bookmark.username === app.company.username) != undefined)  {
           app.company.bookmark = true;
         } else {
           app.company.bookmark = false;
         }
+
+        console.log(app.company);
       });
     };
 
@@ -104,12 +105,13 @@ angular.module('corporateController', ['userServices', 'authServices'])
       User.removeBookmark(companyId).then(function(data) {
         if (data.data.success) {
           var bookmarkIds = data.data.message;
+
           app.company.bookmark = false;
 
           if (bookmarkIds.length > 0) {
             app.bookmarks = [];
             for (var i = 0; i < bookmarkIds.length; i++) {
-              User.getBookmarkInfo(bookmarkIds[i]._id).then(function(data) {
+              User.getBookmarkInfo(bookmarkIds[i]).then(function(data) {
                 if (data.data.success) {
                   app.bookmarks.push(data.data.message);
                 }
@@ -129,21 +131,17 @@ angular.module('corporateController', ['userServices', 'authServices'])
         if (bookmarkIds.length > 0) {
           app.bookmarks = [];
           for (var i = 0; i < bookmarkIds.length; i++) {
-            User.getBookmarkInfo(bookmarkIds[i]._id).then(function(data) {
+            User.getBookmarkInfo(bookmarkIds[i]).then(function(data) {
               if (data.data.success) {
                 app.bookmarks.push(data.data.message);
               }
             });
           }
-
-          console.log(app.bookmarks);
         }
       });
     }
 
     User.getCompanies().then(function(data) {
-      console.log(data.data.success);
-      console.log(data.data.message.length);
       if (data.data.success) {
         app.loading = false;
         app.empty = false;

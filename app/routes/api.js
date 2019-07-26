@@ -1287,7 +1287,7 @@ module.exports = function(router) {
 
   router.get('/getcompanyinfo/:companyId', function(req, res) {
     Org.findOne({
-      _id: req.params.companyId
+      username: req.params.companyId
     }, function(err, company) {
       if (err) throw err;
 
@@ -1307,7 +1307,7 @@ module.exports = function(router) {
       var isDuplicate = false;
 
       for (var i = 0; i < user.bookmarks.length; i++) {
-        if (req.body.companyId == user.bookmarks[i]._id) {
+        if (req.body.companyId == user.bookmarks[i]) {
           isDuplicate = true;
           break;
         }
@@ -1349,7 +1349,7 @@ module.exports = function(router) {
 
   router.get('/getbookmarkinfo/:companyId', function(req, res) {
     Org.findOne({
-      _id: req.params.companyId
+      username: req.params.companyId
     }, function(err, company) {
       if (err) throw err;
 
@@ -1361,29 +1361,31 @@ module.exports = function(router) {
   });
 
   router.put('/removebookmark/:companyId', function(req, res) {
+    console.log("COMPANY ID:");
+    console.log(req.params.companyId);
     User.updateOne({
       username: req.decoded.username
     }, {
-      $pull: {
-        bookmarks: {
-          _id: req.params.companyId
-        }
+      $pullAll: {
+        bookmarks: [req.params.companyId]
       }
     }, function(err, user) {
       if (err) throw err;
 
-      User.findOne({
-        username: req.decoded.username
-      }, function(err, updatedUser) {
-        if (err) throw err;
+      if (user) {
+        User.findOne({
+          username: req.decoded.username
+        }, function(err, updatedUser) {
+          if (err) throw err;
 
-        console.log(updatedUser.bookmarks);
+          console.log(updatedUser);
 
-        res.json({
-          success: true,
-          message: updatedUser.bookmarks
+          res.json({
+            success: true,
+            message: updatedUser.bookmarks
+          });
         });
-      });
+      }
     });
   });
 
