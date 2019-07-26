@@ -97,6 +97,7 @@ angular.module('adminController', ['userServices'])
     };
 
     this.manualInput = function(member) {
+      console.log(app.member);
       app.successMsg = '';
       app.errorMsg = '';
 
@@ -108,6 +109,7 @@ angular.module('adminController', ['userServices'])
 
       manualInput.member = app.member;
       manualInput.eventId = app.eventName._id;
+      manualInput.password = app.password;
 
       User.manualInput(manualInput).then(function(data) {
         if (data.data.success) {

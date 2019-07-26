@@ -145,26 +145,26 @@ module.exports = function(router) {
 
     console.log("REQUEST:");
     console.log(user);
-      var event = new Event();
-      event.name = req.body.name;
-      event.description = req.body.description;
-      event.date = req.body.date;
-      event.start = req.body.start;
-      event.end = req.body.end;
-      event.orgId = user;
+    var event = new Event();
+    event.name = req.body.name;
+    event.description = req.body.description;
+    event.date = req.body.date;
+    event.start = req.body.start;
+    event.end = req.body.end;
+    event.orgId = user;
 
-      console.log(event);
+    console.log(event);
 
-      event.save(function(err) {
-        if (err) {
-          throw err;
-        } else {
-          res.json({
-            success: true,
-            message: event
-          });
-        }
-      });
+    event.save(function(err) {
+      if (err) {
+        throw err;
+      } else {
+        res.json({
+          success: true,
+          message: event
+        });
+      }
+    });
     // }
   });
 
@@ -556,9 +556,7 @@ module.exports = function(router) {
     user = req.decoded.username;
 
     User.find({
-      bookmarks: {
-        _id: req.decoded.id
-      }
+      bookmarks: user
     }, function(err, users) {
       if (err) throw err;
       Org.findOne({
@@ -1019,132 +1017,53 @@ module.exports = function(router) {
 
   // ENDPOINT TO MANUALLY INPUT POINTS FOR MEMBERS
   router.put('/manualinput', function(req, res) {
-    if (req.body.member == null || req.body.member == "" || req.body.member == undefined || req.body.member.userName == null || req.body.member.userName == '' || req.body.member.userName == undefined) {
-      res.json({
-        success: false,
-        message: 'No username was provided.'
-      });
-    } else {
-      User.findOne({
-        username: req.body.member.userName
-      }).select().exec(function(err, user) {
-        if (err) throw err;
+    console.log(req.body);
+    User.findOne({
+      username: req.body.member.userName
+    }).select().exec(function(err, user) {
+      if (err) throw err;
 
-        if (!user) {
-          res.json({
-            success: false,
-            message: 'User not found'
-          });
-        } else {
+      if (!user) {
+        res.json({
+          success: false,
+          message: 'User not found'
+        });
+      } else {
 
-          var isDuplicate = false;
+        var validPassword = user.comparePassword(req.body.member.password);
 
-          for (var i = 0; i < user.events.length; i++) {
-            if (user.events[i]._id.equals(req.body.eventId)) {
-              isDuplicate = true;
-              break;
-            }
-          }
+        console.log(validPassword);
 
-          if (isDuplicate) {
-            res.json({
-              success: false,
-              message: 'Event code already redeemed by the user.'
-            });
-          } else {
-            Event.findOne({
-              _id: req.body.eventId
-            }).select().exec(function(err, code) {
-              if (code.semester == "Fall") {
-                User.findOneAndUpdate({
-                  username: user.username
-                }, {
-                  $push: {
-                    events: {
-                      _id: code._id
-                    }
-                  },
-                  $inc: {
-                    points: code.points,
-                    fallPoints: code.points
-                  }
-                }, function(err, newUser) {
-                  if (err) throw err;
-
-                  if (!newUser) {
-                    res.json({
-                      success: false,
-                      message: "Unable to add event to user"
-                    });
-                  } else {
-                    res.json({
-                      success: true,
-                      message: "Points added to user"
-                    });
-                  }
-                });
-              } else if (code.semester == "Spring") {
-                User.findOneAndUpdate({
-                  username: user.username
-                }, {
-                  $push: {
-                    events: {
-                      _id: code._id
-                    }
-                  },
-                  $inc: {
-                    points: code.points,
-                    springPoints: code.points
-                  }
-                }, function(err, newUser) {
-                  if (err) throw err;
-
-                  if (!newUser) {
-                    res.json({
-                      success: false,
-                      message: "Unable to add event to user"
-                    });
-                  } else {
-                    res.json({
-                      success: true,
-                      message: "Points added to user"
-                    });
-                  }
-                });
-              } else if (code.semester == "Summer") {
-                User.findOneAndUpdate({
-                  username: user.username
-                }, {
-                  $push: {
-                    events: {
-                      _id: code._id
-                    }
-                  },
-                  $inc: {
-                    points: code.points,
-                    summerPoints: code.points
-                  }
-                }, function(err, newUser) {
-                  if (err) throw err;
-
-                  if (!newUser) {
-                    res.json({
-                      success: false,
-                      message: "Unable to add event to user"
-                    });
-                  } else {
-                    res.json({
-                      success: true,
-                      message: "Points added to user"
-                    });
-                  }
-                });
+        if (validPassword) {
+          User.findOneAndUpdate({
+            username: user.username
+          }, {
+            $push: {
+              events: {
+                _id: req.body.eventId
               }
-            });
-          }
+            },
+            $inc: {
+              points: 10
+            }
+          }, function(err, newUser) {
+            if (err) throw err;
+
+            if (!newUser) {
+              res.json({
+                success: false,
+                message: "Unable to add event to user"
+              });
+            } else {
+              res.json({
+                success: true,
+                message: "Success! Points added!"
+              });
+            }
+          });
         }
-      });
-    }
+      }
+    });
   });
 
   // ENDPOINT TO CREATE EXCEL FILES FOR EVENT ATTENDANCE

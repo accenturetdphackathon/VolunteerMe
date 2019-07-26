@@ -1,7 +1,7 @@
 <div class="container custom-container">
   <div class="row">
     <div class="col-12">
-      <h1>My Wall</h1>
+      <h1>Points & Donations</h1>
     </div>
   </div>
 
@@ -10,28 +10,25 @@
   <div class="row">
     <div class="col-md-12 col-12 col-margin">
       <div class="container">
-        <h2 class="subtitle">Statistics</h2>
+        <!-- <h2 class="subtitle">Statistics</h2> -->
         <div class="card-group">
           <div class="card bg-warning">
             <div class="card-header text-center">
-              TOTAL POINTS
+              TOTAL POINTS EARNED
             </div>
             <div class="card-body text-center">
               <h1 class="card-text stat-text">{{ main.points }}</h1>
-            </div>
-            <div class="card-footer text-center">
-              PERCENTILE: {{ main.summerPercentile }}%
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-12 col-12">
+    <div class="col-12">
       <div class="container">
         <div class="row">
-          <div class="col-sm-12">
-            <h2 class="subtitle">Points Record</h2>
+          <div class="col-sm-12 col-md-6">
+            <h2 class="subtitle">Point History</h2>
             <div class="jumbotron" ng-if="main.codeArray.length == 0">
               <p class="text-center">THERE IS NO POINTS RECORD.</p>
             </div>
@@ -39,19 +36,41 @@
               <table class="table table-striped" ng-if="main.codeArray.length != 0">
                 <tr class="table-head">
                   <th>EVENT</th>
-                  <th>TYPE</th>
-                  <th class="text-center">SEMESTER</th>
+                  <th>DATE</th>
                   <th class="text-center">POINTS</th>
                 </tr>
-                <tr ng-repeat="event in main.codeArray | orderBy: 'expiration'">
+                <tr ng-repeat="event in main.codeArray | orderBy: 'name'">
                   <td>{{ event.name }}</td>
-                  <td>{{ event.type }}</td>
-                  <td class="text-center">{{ event.semester }}</td>
-                  <td class="text-center">{{ event.points }}</td>
+                  <td>{{ event.date }}</td>
+                  <td class="text-center">10</td>
                 </tr>
                 <tr class="table-head">
-                  <th>TOTAL POINTS</th>
+                  <th>TOTAL POINTS EARNED</th>
                   <th></th>
+                  <th class="text-center">{{ main.points }}</th>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <h2 class="subtitle">Donation History</h2>
+            <div class="jumbotron" ng-if="main.codeArray.length == 0">
+              <p class="text-center">THERE IS NO POINTS RECORD.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped" ng-if="main.codeArray.length != 0">
+                <tr class="table-head">
+                  <th>EVENT</th>
+                  <th>DATE</th>
+                  <th class="text-center">POINTS</th>
+                </tr>
+                <tr ng-repeat="event in main.codeArray | orderBy: 'name'">
+                  <td>{{ event.name }}</td>
+                  <td>{{ event.date }}</td>
+                  <td class="text-center">10</td>
+                </tr>
+                <tr class="table-head">
+                  <th>TOTAL POINTS EARNED</th>
                   <th></th>
                   <th class="text-center">{{ main.points }}</th>
                 </tr>

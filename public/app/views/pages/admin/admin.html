@@ -139,8 +139,9 @@
                       <th>START TIME</th>
                       <th>END TIME</th>
                       <th class="text-center">INFO</th>
+                      <th class="text-center">SIGN-IN</th>
                     </tr>
-                    <tr ng-repeat="code in admin.codes | filter: eventSearchText | orderBy: 'expiration'">
+                    <tr ng-repeat="code in admin.codes | filter: eventSearchText | orderBy: 'name'">
                       <td>{{ code.name }}</td>
                       <td>{{ code.date }}</td>
                       <td>{{ code.start }}</td>
@@ -148,6 +149,11 @@
                       <td class="text-center">
                         <button type="button" class="btn btn-submit" ng-click="admin.openEventInfoModal(code)">
                           <i class="fas fa-info"></i>
+                        </button>
+                      </td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-submit" ng-click="admin.openManualInputModal(code)">
+                          <i class="fas fa-i-cursor"></i>
                         </button>
                       </td>
                     </tr>
@@ -341,39 +347,44 @@
         </div>
 
         <!-- MANUAL INPUT MODAL -->
-        <!-- <div class="modal fade" id="manualInputModal" aria-labelledby="manualInputModalLabel">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title" id="manualInputLabel">Manual Input</h2>
-      </div>
-      <div class="modal-body">
-        <h4>{{ admin.eventName.name }}</h4>
-        <div class="success-message" ng-show="admin.successMsg">
-          <div class="alert alert-success">{{ admin.successMsg }}</div>
-        </div>
+        <div class="modal fade" id="manualInputModal" aria-labelledby="manualInputModalLabel">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title" id="manualInputLabel">Event Sign In</h2>
+              </div>
+              <div class="modal-body">
+                <h4>{{ admin.eventName.name }}</h4>
+                <div class="success-message" ng-show="admin.successMsg">
+                  <div class="alert alert-success">{{ admin.successMsg }}</div>
+                </div>
 
-        <div class="error-message" ng-show="admin.errorMsg">
-          <div class="alert alert-danger">{{ admin.errorMsg }}</div>
-        </div>
+                <div class="error-message" ng-show="admin.errorMsg">
+                  <div class="alert alert-danger">{{ admin.errorMsg }}</div>
+                </div>
 
-        <form name="manualInputForm" ng-submit="admin.manualInput(member);" novalidate>
-          <div class="form-group">
-            <label for="memberUsername">Member's Username</label>
-            <input type="text" class="form-control" name="name" id="memberUsername" ng-model="admin.member.userName" required>
-          </div>
+                <form name="manualInputForm" ng-submit="admin.manualInput(member);" novalidate>
+                  <div class="form-group">
+                    <label for="memberUsername">Username</label>
+                    <input type="text" class="form-control" name="name" id="memberUsername" ng-model="admin.member.userName" required>
+                  </div>
 
-          <div class="row">
-            <div class="col-12">
-              <button type="reset" class="btn btn-light" ng-click="admin.closeManualInputModal(user)">Close</button>
-              <button type="submit" class="btn btn-success float-right">Submit</button>
+                  <div class="form-group">
+                    <label for="memberUsername">Password</label>
+                    <input type="password" class="form-control" name="pass" id="memberPassword" ng-model="admin.member.password" required>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <button type="reset" class="btn btn-light" ng-click="admin.closeManualInputModal(user)">Close</button>
+                      <button type="submit" class="btn btn-success float-right">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->
+        </div>
 
         <!-- USER INFORMATION MODAL -->
         <div class="modal fade" id="userEventsModal" aria-labelledby="userEventsModalLabel">
